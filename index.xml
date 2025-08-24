@@ -6,4 +6,123 @@
 &lt;li>列表项2&lt;/li>
 &lt;li>列表项3&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>感谢阅读！&lt;/strong>&lt;/p></description></item></channel></rss>
+&lt;p>&lt;strong>感谢阅读！&lt;/strong>&lt;/p></description></item><item><title/><link>https://zhangquanhua1.github.io/categories/linuxkernel/%E5%86%85%E5%AD%98/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/categories/linuxkernel/%E5%86%85%E5%AD%98/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/</guid><description/></item><item><title/><link>https://zhangquanhua1.github.io/categories/%E8%82%A1%E7%A5%A8/%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/categories/%E8%82%A1%E7%A5%A8/%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/</guid><description/></item><item><title/><link>https://zhangquanhua1.github.io/categories/%E8%82%A1%E7%A5%A8/%E9%9B%86%E4%B8%AD%E7%AB%9E%E4%BB%B7%E4%B8%8E%E8%BF%9E%E7%BB%AD%E7%AB%9E%E4%BB%B7/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/categories/%E8%82%A1%E7%A5%A8/%E9%9B%86%E4%B8%AD%E7%AB%9E%E4%BB%B7%E4%B8%8E%E8%BF%9E%E7%BB%AD%E7%AB%9E%E4%BB%B7/</guid><description>&lt;h3 id="核心比喻">核心比喻&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>集中竞价&lt;/strong>：像 &lt;strong>“集体投票，一锤定音”&lt;/strong>。大家先各自出价，但都不交易，等到一个特定时刻，系统找一个能让最多交易成交的价格，统一按这个价格成交。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>连续竞价&lt;/strong>：像 &lt;strong>“自由市场，随到随谈”&lt;/strong>。买卖双方你挂一个买单，我挂一个卖单，价格合适就立刻成交，交易是连续不断进行的。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="一集中竞价">一、集中竞价&lt;/h3>
+&lt;p>集中竞价发生在两个特定的时间段，其目的是为了产生一个公平的、能反映市场集中意愿的&lt;strong>开盘价&lt;/strong>或&lt;strong>收盘价&lt;/strong>。&lt;/p>
+&lt;p>&lt;strong>1. 发生时间：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>开盘集合竞价&lt;/strong>：&lt;strong>每个交易日的 9:15 - 9:25&lt;/strong>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>收盘集合竞价&lt;/strong>：&lt;strong>每个交易日的 14:57 - 15:00&lt;/strong> （注意：目前仅深圳证券交易所、创业板、科创板采用，上海证券交易所的收盘价是最后一笔连续竞价的成交价）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>2. 核心规则与过程：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>收集申报&lt;/strong>：在以上时间段内，投资者可以提交或撤销买卖委托（但&lt;strong>9:20-9:25之间只能提交，不能撤销&lt;/strong>）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>不立即成交&lt;/strong>：在此期间，所有的报单只会被系统收集，并不会真正成交。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>集中撮合&lt;/strong>：在时间点结束时（9:25或15:00），交易系统的电脑主机将所有有效的买卖申报&lt;strong>一次性集中撮合&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>成交价确定原则&lt;/strong>：这个“唯一价格”必须同时满足以下三个条件（优先级从高到低）：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>最大成交量原则&lt;/strong>：在这个价格下，所能成交的股票数量最多。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>高于该价格的所有买盘和低于该价格的所有卖盘都能全部成交&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>与该价格相同的买卖双方中有一方申报全部成交&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>3. 举个例子（开盘集合竞价）：&lt;/strong>&lt;br>
+假设某股票前收盘价为10.00元。在9:15-9:25期间，大家纷纷挂单：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.10元买&lt;/strong>入500手&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.05元买&lt;/strong>入800手&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.00元买&lt;/strong>入1000手&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.00元卖&lt;/strong>出600手&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.05元卖&lt;/strong>出700手&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>有人愿以&lt;strong>10.10元卖&lt;/strong>出900手&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>系统会尝试10.10元、10.05元、10.00元等多个价格，计算在每个价格下能成交多少手。最终发现，在&lt;strong>10.05元&lt;/strong>这个价格时，能实现的成交量最大（例如800手）。那么，10.05元就被确定为当日的&lt;strong>开盘价&lt;/strong>。所有符合条件（买单价≥10.05元，卖单价≤10.05元）的委托单都按10.05元成交。&lt;/p>
+&lt;p>&lt;strong>4. 特点总结：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>价格唯一&lt;/strong>：形成一个统一的价格（开盘价/收盘价）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>时间驱动&lt;/strong>：到点了才统一处理。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>防止操纵&lt;/strong>：收盘集合竞价能有效防止在收盘最后一刻通过大幅拉抬或打压股价来操纵收盘价的行为。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="二连续竞价">二、连续竞价&lt;/h3>
+&lt;p>连续竞价是交易日中最主要的交易方式，我们平时看盘时的实时价格波动就是在连续竞价中产生的。&lt;/p>
+&lt;p>&lt;strong>1. 发生时间：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>早市&lt;/strong>：&lt;strong>9:30 - 11:30&lt;/strong> （开盘集合竞价结束后立即开始）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>午市&lt;/strong>：&lt;strong>13:00 - 14:57&lt;/strong> （对于有收盘集合竞价的深市等）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>2. 核心规则：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>价格优先&lt;/strong>：&lt;strong>较高的买进申报&lt;/strong>优先于较低的买进申报；&lt;strong>较低的卖出申报&lt;/strong>优先于较高的卖出申报。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>时间优先&lt;/strong>：同价位的申报，&lt;strong>谁先提交订单（挂单早）&lt;/strong>，谁就优先成交。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>3. 成交过程：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>新进入的买单会与卖单队列中&lt;strong>价格最低的卖单&lt;/strong>（卖一）比较。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>新进入的卖单会与买单队列中&lt;strong>价格最高的买单&lt;/strong>（买一）比较。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>只要报单价格&lt;strong>匹配&lt;/strong>（买价 ≥ 卖价），就立即成交。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>4. 举个例子：&lt;/strong>&lt;br>
+假设某股票实时五档行情为：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>卖五&lt;/strong> &amp;hellip; 10.10&lt;/p></description></item></channel></rss>
