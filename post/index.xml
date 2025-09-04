@@ -1,4 +1,243 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Example Site</title><link>https://zhangquanhua1.github.io/post/</link><description>Recent content in Posts on Example Site</description><generator>Hugo -- gohugo.io</generator><language>en</language><copyright>Example Person</copyright><lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://zhangquanhua1.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Markdown Syntax Guide</title><link>https://zhangquanhua1.github.io/p/markdown-syntax-guide/</link><pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/markdown-syntax-guide/</guid><description>&lt;img src="https://zhangquanhua1.github.io/p/markdown-syntax-guide/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg" alt="Featured image of post Markdown Syntax Guide" /&gt;&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Example Site</title><link>https://zhangquanhua1.github.io/post/</link><description>Recent content in Posts on Example Site</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 04 Sep 2025 22:42:43 +0800</lastBuildDate><atom:link href="https://zhangquanhua1.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>股票基础知识</title><link>https://zhangquanhua1.github.io/p/%E8%82%A1%E7%A5%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link><pubDate>Thu, 04 Sep 2025 22:42:43 +0800</pubDate><guid>https://zhangquanhua1.github.io/p/%E8%82%A1%E7%A5%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid><description>&lt;hr&gt;
+&lt;h2 id="summary-全面介绍股票投资的基础知识包括股票类型市场术语交易规则技术指标等核心概念"&gt;title: &amp;ldquo;股票基础知识大全&amp;rdquo;
+date: 2025-08-30T09:00:00+08:00
+draft: false
+categories: [&amp;ldquo;股票&amp;rdquo;]
+tags: [&amp;ldquo;股票基础&amp;rdquo;, &amp;ldquo;投资入门&amp;rdquo;, &amp;ldquo;交易规则&amp;rdquo;, &amp;ldquo;市场术语&amp;rdquo;]
+summary: &amp;ldquo;全面介绍股票投资的基础知识，包括股票类型、市场术语、交易规则、技术指标等核心概念&amp;rdquo;
+&lt;/h2&gt;&lt;h2 id="一股票类型相关名词"&gt;一、股票类型相关名词
+&lt;/h2&gt;&lt;p&gt;• A股：人民币普通股票，境内公司发行，境内投资者以人民币交易。实行“T+1”交易和涨跌幅限制。&lt;/p&gt;
+&lt;p&gt;• B股：人民币面值、外币交易，在上交所或深交所上市的外资股。交收周期较长（历史上多为T+3），有涨跌幅限制。&lt;/p&gt;
+&lt;p&gt;• H股：内地注册公司在香港联合交易所上市的股票（常称国企股）。“T+0”交易，无涨跌幅限制。&lt;/p&gt;
+&lt;p&gt;• N股：在中国大陆注册、于纽约交易所或纳斯达克上市的外资股。“T+0”交易，无涨跌幅限制。&lt;/p&gt;
+&lt;p&gt;• S股：主要业务在中国大陆、在新加坡交易所上市的中资背景公司股票。“T+0”交易，交易所设有涨跌幅限制。&lt;/p&gt;
+&lt;p&gt;• 普通股：享有表决权、分红权、剩余财产分配权，股息不固定。&lt;/p&gt;
+&lt;p&gt;• 优先股：分红优先、清算优先，通常无或有限表决权，股息率相对固定。&lt;/p&gt;
+&lt;p&gt;• 原始股：公司上市前发行给核心管理层、员工或机构的股份。&lt;/p&gt;
+&lt;p&gt;• 蓝筹股：业绩稳健、规模较大、分红稳定的龙头型公司股票。&lt;/p&gt;
+&lt;p&gt;• 红筹股：境外注册、在港上市，由中资机构实际控制的公司股票。&lt;/p&gt;
+&lt;p&gt;• 白马股：长期业绩优良、成长性较明确、风险相对较低的股票。&lt;/p&gt;
+&lt;p&gt;• 龙头股：行业内具有显著带动效应、对板块走势有示范作用的股票。&lt;/p&gt;
+&lt;p&gt;• 绩优股：历史业绩优秀、未来预期稳健但高成长性有限的股票。&lt;/p&gt;
+&lt;p&gt;• 垃圾股：基本面差、风险较高的公司股票。&lt;/p&gt;
+&lt;p&gt;• 成长股：处于高成长阶段、利润增速较高的公司股票。&lt;/p&gt;
+&lt;p&gt;• 冷门股：成交量小、流动性弱、价格波动较小的股票。&lt;/p&gt;
+&lt;p&gt;• 概念股：受某一政策或热点概念驱动而被市场关注的股票。&lt;/p&gt;
+&lt;p&gt;• 行业股：按照主营业务划分在同一行业板块内的股票。&lt;/p&gt;
+&lt;h2 id="二投资市场相关名词"&gt;二、投资市场相关名词
+&lt;/h2&gt;&lt;p&gt;• 一级市场：证券发行市场，进行新股发行与认购，不允许自由交易。&lt;/p&gt;
+&lt;p&gt;• 二级市场：已发行证券的流通转让市场，包括上交所、深交所、北交所等集中交易市场与场外市场。&lt;/p&gt;
+&lt;p&gt;• 第三市场：由非交易所会员在场外交易所上市证券的市场（如银行信托部等参与）。&lt;/p&gt;
+&lt;p&gt;• 第四市场：机构或大户绕开交易所与经纪商，直接通过网络撮合交易的市场。&lt;/p&gt;
+&lt;p&gt;• 北向资金：通过沪/深股通流入A股的港资与外资。&lt;/p&gt;
+&lt;p&gt;• 南下资金：内地资金通过港股通流入香港市场的资金。&lt;/p&gt;
+&lt;p&gt;• 熊市（空头）：价格长期下行、预期偏悲观的市场环境。&lt;/p&gt;
+&lt;p&gt;• 牛市（多头）：价格长期上行、预期偏乐观的市场环境。&lt;/p&gt;
+&lt;p&gt;• 牛皮市：价格长时间窄幅波动，缺乏趋势。&lt;/p&gt;
+&lt;p&gt;• 利多/利空：分别指有利于上涨/下跌的因素或消息。&lt;/p&gt;
+&lt;h2 id="三股票分析相关名词与指标"&gt;三、股票分析相关名词与指标
+&lt;/h2&gt;&lt;p&gt;• 基本面：宏观环境与公司经营、财务、治理、竞争力等基本情况。&lt;/p&gt;
+&lt;p&gt;• 技术面：价格与量能衍生的形态、趋势与技术指标。&lt;/p&gt;
+&lt;p&gt;• 天地板：盘中先涨停后跌停。&lt;/p&gt;
+&lt;p&gt;• 地天板：盘中先跌停后涨停。&lt;/p&gt;
+&lt;p&gt;• 涨停/跌停：当日价格波动的最高/最低限制价。&lt;/p&gt;
+&lt;p&gt;• 换手率：一定期间成交量占流通股本比例。公式：换手率＝成交量／流通股本×100%。&lt;/p&gt;
+&lt;p&gt;• 筹码集中度：流通筹码在部分账户或价位区间的集中程度。&lt;/p&gt;
+&lt;p&gt;• 市盈率（PE）：股价/每股净利润；较低通常意味着估值较低（需结合行业）。&lt;/p&gt;
+&lt;p&gt;• 市净率（PB）：股价/每股净资产；常用于金融、周期品等估值参考。&lt;/p&gt;
+&lt;p&gt;• 市销率（PS）：股价/每股销售收入；适用于早期、高成长或亏损公司比较。&lt;/p&gt;
+&lt;p&gt;• 股息率：每股股息/股价；衡量分红回报。&lt;/p&gt;
+&lt;p&gt;• 每股收益（EPS）：净利润/总股本。&lt;/p&gt;
+&lt;p&gt;• 估值扩展指标：PEG（PE/利润增速）、EV/EBITDA 等。&lt;/p&gt;
+&lt;p&gt;• K线：由开盘、收盘、最高、最低构成，反映区间价格波动。&lt;/p&gt;
+&lt;p&gt;• 均线（MA）：一定期间收盘价的移动平均，如5/10/20/60/120/250日。&lt;/p&gt;
+&lt;p&gt;• MACD：由DIF、DEA、柱状图与零轴构成，反映趋势强弱与拐点。&lt;/p&gt;
+&lt;p&gt;• KDJ：反映超买超卖与短期拐点。&lt;/p&gt;
+&lt;p&gt;• OBV：将成交量方向与价格变动结合，观察量价配合。&lt;/p&gt;
+&lt;p&gt;• BIAS：价格相对均线的偏离程度。&lt;/p&gt;
+&lt;p&gt;• RSI：一定期间上涨幅度占总波动幅度的比例。&lt;/p&gt;
+&lt;p&gt;• BRAR：BR重收盘价，AR重开盘价，反映市场人气与意愿。&lt;/p&gt;
+&lt;p&gt;• BOLL（布林带）：以上轨/中轨/下轨刻画波动区间（常以20日均线与标准差计算）。&lt;/p&gt;
+&lt;p&gt;• 内盘/外盘：分别为以买一价成交的被动卖出量/以卖一价成交的主动买入量。&lt;/p&gt;
+&lt;p&gt;• 缩量/放量：与前期相比，成交量减少为“缩量”，增加为“放量”。&lt;/p&gt;
+&lt;h2 id="四交易基础与竞价机制"&gt;四、交易基础与竞价机制
+&lt;/h2&gt;&lt;p&gt;• 交易时间（A股）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;9:15–9:25 开盘集合竞价（9:20–9:25不可撤单）&lt;/li&gt;
+&lt;li&gt;9:30–11:30、13:00–15:00 连续竞价&lt;/li&gt;
+&lt;li&gt;14:57–15:00 收盘集合竞价（主板/科创/创业板）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 竞价规则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;集合竞价：以最大成交量原则确定开/收盘价；未成交部分转入连续竞价。&lt;/li&gt;
+&lt;li&gt;连续竞价：价格优先、时间优先撮合成交。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 涨跌幅限制（以交易所最新规定为准）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主板：一般为±10%；ST类股票一般为±5%。&lt;/li&gt;
+&lt;li&gt;创业板/科创板：一般为±20%。&lt;/li&gt;
+&lt;li&gt;新股上市前5个交易日通常不设涨跌幅限制（设有盘中临停机制）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• T+1/T+0：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A股股票一般“T+1”卖出；资金与交收“T+1/ T+2”结算。&lt;/li&gt;
+&lt;li&gt;港股、美股多为“T+0”回转交易。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 临时停牌（盘中）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;因异常波动、重大事项、或新股上市盘中价格稳定机制触发而临停。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 盘后交易：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;15:00–15:30 盘后固定价格交易（部分板块适用）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="十委托与订单类型"&gt;十、委托与订单类型
+&lt;/h2&gt;&lt;p&gt;• 限价委托：指定价格或更优价格成交，未成交部分挂单等待。&lt;/p&gt;
+&lt;p&gt;• 市价委托（A股常见变种）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最优五档即时成交剩余撤销（FOK局部变体）：与对手方前五档即时成交，剩余撤单。&lt;/li&gt;
+&lt;li&gt;最优五档即时成交剩余转限价（IOC转限价）：即时成交后，剩余部分以成交均价或对手价挂为限价单。&lt;/li&gt;
+&lt;li&gt;本方最优价格：以本方队列最优价申报，提高成交概率。&lt;/li&gt;
+&lt;li&gt;对手方最优价格：以对手方队列最优价申报，追求即时成交。&lt;/li&gt;
+&lt;li&gt;注：具体可用的市价类型以交易所与券商支持为准。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 有效期：A股场内委托为当日有效，收盘未成交自动失效；不支持GTC（长期有效）。&lt;/p&gt;
+&lt;h2 id="十一申报单位与价格最小变动"&gt;十一、申报单位与价格最小变动
+&lt;/h2&gt;&lt;p&gt;• 价格最小变动价位（Tick）：多数股票为0.01元；北交所、可转债等以交易所规则为准。&lt;/p&gt;
+&lt;p&gt;• 申报数量单位：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;股票：一般以“手”为单位，1手=100股。&lt;/li&gt;
+&lt;li&gt;可转债：1手=10张（面值通常100元/张）。&lt;/li&gt;
+&lt;li&gt;ETF：多为1手=100份，部分货币ETF可能不同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 零股交易：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;卖出可出现“非整手”（如剩余不足100股），允许一次性卖出；买入通常需整手。&lt;/li&gt;
+&lt;li&gt;盘后固定价格交易与北交所等对零股规则可能不同，以最新规定为准。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="十二撤单订单状态与撮合优先级"&gt;十二、撤单、订单状态与撮合优先级
+&lt;/h2&gt;&lt;p&gt;• 撤单规则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;开盘集合竞价：9:15–9:20可撤，9:20–9:25不可撤。&lt;/li&gt;
+&lt;li&gt;连续竞价：委托未成交可随时撤单（不含临停等特殊时段）。&lt;/li&gt;
+&lt;li&gt;收盘集合竞价：14:57–15:00一般不可撤单。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 常见订单状态：已报、部成、全成、已撤、废单（价格/数量无效、账户限制等）。&lt;/p&gt;
+&lt;p&gt;• 撮合优先级：价格优先、时间优先；同价位按排队时间先后成交。&lt;/p&gt;
+&lt;h2 id="十三资金可用与结算时间线"&gt;十三、资金可用与结算时间线
+&lt;/h2&gt;&lt;p&gt;• 卖出回款：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当日卖出后，资金通常“可用不可取”；次日结算后可取（以券商资金规则为准）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 买入与卖出：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;买入后当日不得卖出（T+1）；可转债、部分基金等品种可能为T+0，以规则为准。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 分红派息与配股缴款：资金及股份到位时间以公告与结算机构安排为准。&lt;/p&gt;
+&lt;h2 id="十四融资融券基础"&gt;十四、融资融券基础
+&lt;/h2&gt;&lt;p&gt;• 定义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;融资：向券商借钱买入标的证券，负债计息。&lt;/li&gt;
+&lt;li&gt;融券：借入标的证券卖出（做空），到期需买券归还并支付费用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 标的与门槛：需开通信用账户、风险评估达标，标的证券由交易所定期调整。&lt;/p&gt;
+&lt;p&gt;• 风险要点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;保证金比例与维持担保比例，低于维保线可能被平仓。&lt;/li&gt;
+&lt;li&gt;利息与费率成本、价格波动与流动性风险。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="十五盘后交易与大宗交易补充"&gt;十五、盘后交易与大宗交易补充
+&lt;/h2&gt;&lt;p&gt;• 盘后固定价格交易：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;15:00–15:30 以当日收盘价撮合；仅限限价委托，部分板块或证券支持。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 大宗交易（Block Trade）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;适用于大额交易，场外协议达成、场内申报过户，价格区间与最小成交数量有规定。&lt;/li&gt;
+&lt;li&gt;对二级市场即时价格影响较小，但可能传递供需与机构动向信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="十六ipo申购与配售基础"&gt;十六、IPO申购与配售基础
+&lt;/h2&gt;&lt;p&gt;• 申购条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;需持有相应市值（以T-2日账户持有为准），不同板块市值门槛不同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 申购流程：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;公告日查看代码与申购上限 → 申购日按代码与数量下单 → 中签公布后按时缴款。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 配售与中签：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采取摇号/配号机制，按市值获得配号，中签概率与市值、发行规模等相关。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 上市首日：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;前5个交易日通常不设涨跌幅限制（有临停），注意流动性与波动风险。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="五账户与常见投资品种"&gt;五、账户与常见投资品种
+&lt;/h2&gt;&lt;p&gt;• 账户类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;普通账户：交易沪深主板、北交所等。&lt;/li&gt;
+&lt;li&gt;信用账户：融资融券（需风险评估与权限开通）。&lt;/li&gt;
+&lt;li&gt;科创板与创业板权限：满足条件后单独开通。&lt;/li&gt;
+&lt;li&gt;港股通权限：满足资产条件后开通。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 常见品种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ETF/LOF：场内基金（ETF）与可场内外申赎/交易的基金（LOF）。&lt;/li&gt;
+&lt;li&gt;封闭式基金、指数基金、主动型基金。&lt;/li&gt;
+&lt;li&gt;可转债：债券与期权性兼具，可按约定条件转换为股票。&lt;/li&gt;
+&lt;li&gt;新股申购：满足条件可按市值申购，配售中签后缴款。&lt;/li&gt;
+&lt;li&gt;优先股、存托凭证（CDR）、公募REITs（不动产投资信托）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="六公司行为与除权除息"&gt;六、公司行为与除权除息
+&lt;/h2&gt;&lt;p&gt;• 常见公司行为：分红、送股、转增、配股、并购重组、股份回购等。&lt;/p&gt;
+&lt;p&gt;• 除权/除息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;除息：派发现金股利后股价相应向下调整。&lt;/li&gt;
+&lt;li&gt;除权：送股或转增后因股本扩大，股价相应按比例下调。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;• 简化计算：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;现金分红后参考价 ≈ 除权前收盘价 − 每股现金分红。&lt;/li&gt;
+&lt;li&gt;送/转增后参考价 ≈ 除权前收盘价 ÷（1 + 送转比例）。&lt;/li&gt;
+&lt;li&gt;实际以交易所与登记结算机构披露为准。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="七费用税费与结算"&gt;七、费用、税费与结算
+&lt;/h2&gt;&lt;p&gt;• 佣金：按成交金额的一定比例收取，券商间差异较大（设有最低收费）。&lt;/p&gt;
+&lt;p&gt;• 过户费：沪市股票按成交金额一定比例收取；深市股票目前多不收（以最新规则为准）。&lt;/p&gt;
+&lt;p&gt;• 交易经手费与监管费：按交易所/监管机构标准收取。&lt;/p&gt;
+&lt;p&gt;• 印花税：卖出股票单边征收，税率以最新国家规定为准。&lt;/p&gt;
+&lt;p&gt;• 结算：A股采用中国结算的集中登记与资金证券交收体系，通常T+1/T+2完成清算交收。&lt;/p&gt;
+&lt;h2 id="八交易术语补充"&gt;八、交易术语补充
+&lt;/h2&gt;&lt;p&gt;• 筹码：投资者持有的股票数量。&lt;/p&gt;
+&lt;p&gt;• 吸筹/建仓：资金在某价位区间持续买入、建立头寸。&lt;/p&gt;
+&lt;p&gt;• 洗盘：通过短期打压或震荡清洗不稳定持仓。&lt;/p&gt;
+&lt;p&gt;• 出货：在高位或利好刺激下分批卖出实现收益。&lt;/p&gt;
+&lt;p&gt;• 护盘：为稳定价格进行买入维稳的行为。&lt;/p&gt;
+&lt;p&gt;• 崩盘/跳水：短时间内价格快速大幅下跌。&lt;/p&gt;
+&lt;p&gt;• 高开/低开/平开：当日开盘价高于/低于/等于昨日收盘价。&lt;/p&gt;
+&lt;p&gt;• 套牢：买入后价格持续下跌而暂时亏损无法卖出的状态。&lt;/p&gt;
+&lt;p&gt;• 盘整：价格在一定区间内横向波动。&lt;/p&gt;
+&lt;h2 id="九股票字母标识与特别标记"&gt;九、股票字母标识与特别标记
+&lt;/h2&gt;&lt;p&gt;• N：新股上市首日加“N”，次日取消。&lt;/p&gt;
+&lt;p&gt;• C：上市第2–5日标注“C”，第6日取消。&lt;/p&gt;
+&lt;p&gt;• R：可融资融券。&lt;/p&gt;
+&lt;p&gt;• kr：科创板可融资融券（k=科创，r=融资融券）。&lt;/p&gt;
+&lt;p&gt;• U：科创板尚未盈利企业；首次实现盈利后取消。&lt;/p&gt;
+&lt;p&gt;• W：同股不同权（表决权差异安排）；不再适用时取消。&lt;/p&gt;
+&lt;p&gt;• V：协议控制架构（VIE等）或类似特殊安排；不再适用时取消。&lt;/p&gt;
+&lt;p&gt;• G：指数贡献度视图入口（“贡”）。&lt;/p&gt;
+&lt;p&gt;• L：存在关联品种（B股、可转债、H股、权证等）。&lt;/p&gt;
+&lt;p&gt;• XR：已除权，买入后不再享有送股/转增等权利。&lt;/p&gt;
+&lt;p&gt;• XD：已除息，买入后不再享有当期派息权利。&lt;/p&gt;
+&lt;p&gt;• DR：除权除息，买入后不再享有送股与派息权利。&lt;/p&gt;
+&lt;p&gt;• ST：连续两个会计年度亏损等特殊情形的特别处理。&lt;/p&gt;
+&lt;p&gt;• *ST：存在退市风险的特别处理与警示。&lt;/p&gt;
+&lt;p&gt;• PT：已退市或进入退市整理阶段的股票。&lt;/p&gt;
+&lt;p&gt;• NST：重组或股改后恢复上市的ST股。&lt;/p&gt;
+&lt;p&gt;• SZ/SH/BJ：分别代表深交所/上交所/北交所上市。&lt;/p&gt;
+&lt;p&gt;——&lt;/p&gt;
+&lt;p&gt;提示：交易规则、费率与税率可能随监管与交易所规则调整而变化，具体以交易所与券商、登记结算机构的最新公告为准。&lt;/p&gt;</description></item><item><title>Markdown Syntax Guide</title><link>https://zhangquanhua1.github.io/p/markdown-syntax-guide/</link><pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/markdown-syntax-guide/</guid><description>&lt;img src="https://zhangquanhua1.github.io/p/markdown-syntax-guide/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg" alt="Featured image of post Markdown Syntax Guide" /&gt;&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;
 &lt;h2 id="headings"&gt;Headings
 &lt;/h2&gt;&lt;p&gt;The following HTML &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;—&lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt; elements represent six levels of section headings. &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; is the highest section level while &lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt; is the lowest.&lt;/p&gt;
 &lt;h1 id="h1"&gt;H1
@@ -212,186 +451,4 @@ alt="Google"
 &gt;talk&lt;/a&gt; during Gopherfest, November 18, 2015.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</description></item><item><title>Rich Content</title><link>https://zhangquanhua1.github.io/p/rich-content/</link><pubDate>Sun, 10 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/rich-content/</guid><description>&lt;p&gt;Hugo ships with several &lt;a class="link" href="https://gohugo.io/content-management/shortcodes/#use-hugo-s-built-in-shortcodes" target="_blank" rel="noopener"
-&gt;Built-in Shortcodes&lt;/a&gt; for rich content, along with a &lt;a class="link" href="https://gohugo.io/about/hugo-and-gdpr/" target="_blank" rel="noopener"
-&gt;Privacy Config&lt;/a&gt; and a set of Simple Shortcodes that enable static and no-JS versions of various social media embeds.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="youtube-privacy-enhanced-shortcode"&gt;YouTube Privacy Enhanced Shortcode
-&lt;/h2&gt;&lt;div class="video-wrapper"&gt;
-&lt;iframe loading="lazy"
-src="https://www.youtube.com/embed/ZJthWmvUzzc"
-allowfullscreen
-title="YouTube Video"
-&gt;
-&lt;/iframe&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id="twitter-simple-shortcode"&gt;Twitter Simple Shortcode
-&lt;/h2&gt;&lt;style type="text/css"&gt;
-.twitter-tweet {
-font:
-14px/1.45 -apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-Oxygen-Sans,
-Ubuntu,
-Cantarell,
-"Helvetica Neue",
-sans-serif;
-border-left: 4px solid #2b7bb9;
-padding-left: 1.5em;
-color: #555;
-}
-.twitter-tweet a {
-color: #2b7bb9;
-text-decoration: none;
-}
-blockquote.twitter-tweet a:hover,
-blockquote.twitter-tweet a:focus {
-text-decoration: underline;
-}
-&lt;/style&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;“In addition to being more logical, asymmetry has the advantage that its complete appearance is far more optically effective than symmetry.”&lt;br&gt;— Jan Tschichold &lt;a href="https://t.co/gcv7SrhvJb"&gt;pic.twitter.com/gcv7SrhvJb&lt;/a&gt;&lt;/p&gt;&amp;mdash; Design Reviewed | Graphic Design History (@DesignReviewed) &lt;a href="https://twitter.com/DesignReviewed/status/1085870671291310081?ref_src=twsrc%5Etfw"&gt;January 17, 2019&lt;/a&gt;&lt;/blockquote&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id="vimeo-simple-shortcode"&gt;Vimeo Simple Shortcode
-&lt;/h2&gt;&lt;style&gt;
-.__h_video {
-position: relative;
-padding-bottom: 56.23%;
-height: 0;
-overflow: hidden;
-width: 100%;
-background: #000;
-}
-.__h_video img {
-width: 100%;
-height: auto;
-color: #000;
-}
-.__h_video .play {
-height: 72px;
-width: 72px;
-left: 50%;
-top: 50%;
-margin-left: -36px;
-margin-top: -36px;
-position: absolute;
-cursor: pointer;
-}
-&lt;/style&gt;&lt;div class="s_video_simple __h_video"&gt;
-&lt;a href="https://vimeo.com/48912912" rel="noopener" target="_blank"&gt;
-&lt;img src="https://i.vimeocdn.com/video/337401969-979f0cc9f55fdf305fb8984e90d92639ec9d7ecc4c9dfbc6536e28edb43784ce-d_640?region=us" srcset="https://i.vimeocdn.com/video/337401969-979f0cc9f55fdf305fb8984e90d92639ec9d7ecc4c9dfbc6536e28edb43784ce-d_640?region=us 1x, https://i.vimeocdn.com/video/337401969-979f0cc9f55fdf305fb8984e90d92639ec9d7ecc4c9dfbc6536e28edb43784ce-d_640?region=us 2x" alt="Sing Jan Swing - Kinetic Type"&gt;
-&lt;div class="play"&gt;
-&lt;svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61 61"&gt;&lt;circle cx="30.5" cy="30.5" r="30.5" opacity=".8" fill="#000"&gt;&lt;/circle&gt;&lt;path d="M25.3 19.2c-2.1-1.2-3.8-.2-3.8 2.2v18.1c0 2.4 1.7 3.4 3.8 2.2l16.6-9.1c2.1-1.2 2.1-3.2 0-4.4l-16.6-9z" fill="#fff"&gt;&lt;/path&gt;&lt;/svg&gt;
-&lt;/div&gt;
-&lt;/a&gt;
-&lt;/div&gt;
-&lt;h2 id="bilibilibi-shortcode"&gt;bilibilibi Shortcode
-&lt;/h2&gt;
-&lt;div class="video-wrapper"&gt;
-&lt;iframe src="https://player.bilibili.com/player.html?as_wide=1&amp;amp;high_quality=1&amp;amp;page=1&amp;aid=498363026"
-scrolling="no"
-frameborder="no"
-framespacing="0"
-allowfullscreen="true"
-&gt;
-&lt;/iframe&gt;
-&lt;/div&gt;
-&lt;h2 id="gist-shortcode"&gt;Gist Shortcode
-&lt;/h2&gt;&lt;script src="https://gist.github.com/spf13/7896402.js"&gt;&lt;/script&gt;
-&lt;h2 id="gitlab-snippets-shortcode"&gt;Gitlab Snippets Shortcode
-&lt;/h2&gt;&lt;script
-type="application/javascript"
-src="https://gitlab.com/-/snippets/2349278.js"
-&gt;&lt;/script&gt;
-&lt;h2 id="quote-shortcode"&gt;Quote Shortcode
-&lt;/h2&gt;&lt;p&gt;Stack adds a &lt;code&gt;quote&lt;/code&gt; shortcode. For example:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;A famous person, &lt;/span&gt;&lt;a href="https://en.wikipedia.org/wiki/Book"&gt;&lt;cite&gt;The book they wrote&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;a href="https://en.wikipedia.org/wiki/Book"&gt;&lt;cite&gt;Anonymous book&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;cite&gt;Some book&lt;/cite&gt;&lt;/span&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Somebody&lt;/span&gt;&lt;cite&gt;&lt;/cite&gt;&lt;/span&gt;&lt;/blockquote&gt;</description></item><item><title>Placeholder Text</title><link>https://zhangquanhua1.github.io/p/placeholder-text/</link><pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/placeholder-text/</guid><description>&lt;img src="https://zhangquanhua1.github.io/p/placeholder-text/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post Placeholder Text" /&gt;&lt;p&gt;Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p&gt;
-&lt;p&gt;Redit teque digerit hominumque toris verebor lumina non cervice subde tollit usus habet Arctonque, furores quas nec ferunt. Quoque montibus nunc caluere tempus inhospita parcite confusaque translucet patri vestro qui optatis lumine cognoscere flos nubis! Fronde ipsamque patulos Dryopen deorum.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Exierant elisi ambit vivere dedere&lt;/li&gt;
-&lt;li&gt;Duce pollice&lt;/li&gt;
-&lt;li&gt;Eris modo&lt;/li&gt;
-&lt;li&gt;Spargitque ferrea quos palude&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Rursus nulli murmur; hastile inridet ut ab gravi sententia! Nomine potitus silentia flumen, sustinet placuit petis in dilapsa erat sunt. Atria tractus malis.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Comas hunc haec pietate fetum procerum dixit&lt;/li&gt;
-&lt;li&gt;Post torum vates letum Tiresia&lt;/li&gt;
-&lt;li&gt;Flumen querellas&lt;/li&gt;
-&lt;li&gt;Arcanaque montibus omnes&lt;/li&gt;
-&lt;li&gt;Quidem et&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id="vagus-elidunt"&gt;Vagus elidunt
-&lt;/h1&gt;&lt;p&gt;&lt;svg class="canon" xmlns="http://www.w3.org/2000/svg" overflow="visible" viewBox="0 0 496 373" height="373" width="496"&gt;&lt;g fill="none"&gt;&lt;path stroke="#000" stroke-width=".75" d="M.599 372.348L495.263 1.206M.312.633l494.95 370.853M.312 372.633L247.643.92M248.502.92l246.76 370.566M330.828 123.869V1.134M330.396 1.134L165.104 124.515"&gt;&lt;/path&gt;&lt;path stroke="#ED1C24" stroke-width=".75" d="M275.73 41.616h166.224v249.05H275.73zM54.478 41.616h166.225v249.052H54.478z"&gt;&lt;/path&gt;&lt;path stroke="#000" stroke-width=".75" d="M.479.375h495v372h-495zM247.979.875v372"&gt;&lt;/path&gt;&lt;ellipse cx="498.729" cy="177.625" rx=".75" ry="1.25"&gt;&lt;/ellipse&gt;&lt;ellipse cx="247.229" cy="377.375" rx=".75" ry="1.25"&gt;&lt;/ellipse&gt;&lt;/g&gt;&lt;/svg&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Canons_of_page_construction#Van_de_Graaf_canon" target="_blank" rel="noopener"
-&gt;The Van de Graaf Canon&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id="mane-refeci-capiebant-unda-mulcebat"&gt;Mane refeci capiebant unda mulcebat
-&lt;/h2&gt;&lt;p&gt;Victa caducifer, malo vulnere contra dicere aurato, ludit regale, voca! Retorsit colit est profanae esse virescere furit nec; iaculi matertera et visa est, viribus. Divesque creatis, tecta novat collumque vulnus est, parvas. &lt;strong&gt;Faces illo pepulere&lt;/strong&gt; tempus adest. Tendit flamma, ab opes virum sustinet, sidus sequendo urbis.&lt;/p&gt;
-&lt;p&gt;Iubar proles corpore raptos vero auctor imperium; sed et huic: manus caeli Lelegas tu lux. Verbis obstitit intus oblectamina fixis linguisque ausus sperare Echionides cornuaque tenent clausit possit. Omnia putatur. Praeteritae refert ausus; ferebant e primus lora nutat, vici quae mea ipse. Et iter nil spectatae vulnus haerentia iuste et exercebat, sui et.&lt;/p&gt;
-&lt;p&gt;Eurytus Hector, materna ipsumque ut Politen, nec, nate, ignari, vernum cohaesit sequitur. Vel &lt;strong&gt;mitis temploque&lt;/strong&gt; vocatus, inque alis, &lt;em&gt;oculos nomen&lt;/em&gt; non silvis corpore coniunx ne displicet illa. Crescunt non unus, vidit visa quantum inmiti flumina mortis facto sic: undique a alios vincula sunt iactata abdita! Suspenderat ego fuit tendit: luna, ante urbem Propoetides &lt;strong&gt;parte&lt;/strong&gt;.&lt;/p&gt;</description></item><item><title>Math Typesetting</title><link>https://zhangquanhua1.github.io/p/math-typesetting/</link><pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/math-typesetting/</guid><description>&lt;p&gt;Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.&lt;/p&gt;
-&lt;p&gt;In this example we will be using &lt;a class="link" href="https://katex.org/" target="_blank" rel="noopener"
-&gt;KaTeX&lt;/a&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Create a partial under &lt;code&gt;/layouts/partials/math.html&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Within this partial reference the &lt;a class="link" href="https://katex.org/docs/autorender.html" target="_blank" rel="noopener"
-&gt;Auto-render Extension&lt;/a&gt; or host these scripts locally.&lt;/li&gt;
-&lt;li&gt;Include the partial in your templates like so:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;span class="lnt"&gt;3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;{{&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; or .Params.math .Site.Params.math &lt;span class="o"&gt;}}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;{{&lt;/span&gt; partial &lt;span class="s2"&gt;&amp;#34;math.html&amp;#34;&lt;/span&gt; . &lt;span class="o"&gt;}}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;{{&lt;/span&gt; end &lt;span class="o"&gt;}}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;To enable KaTeX globally set the parameter &lt;code&gt;math&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt; in a project&amp;rsquo;s configuration&lt;/li&gt;
-&lt;li&gt;To enable KaTeX on a per page basis include the parameter &lt;code&gt;math: true&lt;/code&gt; in content files&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Use the online reference of &lt;a class="link" href="https://katex.org/docs/supported.html" target="_blank" rel="noopener"
-&gt;Supported TeX Functions&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id="examples"&gt;Examples
-&lt;/h3&gt;&lt;p&gt;Inline math: $\varphi = \dfrac{1+\sqrt5}{2}= 1.6180339887…$&lt;/p&gt;
-&lt;p&gt;Block math:
-&lt;/p&gt;
-$$
-\varphi = 1+\frac{1} {1+\frac{1} {1+\frac{1} {1+\cdots} } }
-$$</description></item><item><title>Emoji Support</title><link>https://zhangquanhua1.github.io/p/emoji-support/</link><pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/emoji-support/</guid><description>&lt;img src="https://zhangquanhua1.github.io/p/emoji-support/the-creative-exchange-d2zvqp3fpro-unsplash.jpg" alt="Featured image of post Emoji Support" /&gt;&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;
-&lt;p&gt;The &lt;a class="link" href="https://gohugo.io/functions/emojify/" target="_blank" rel="noopener"
-&gt;&lt;code&gt;emojify&lt;/code&gt;&lt;/a&gt; function can be called directly in templates or &lt;a class="link" href="https://gohugo.io/templates/shortcode-templates/#inline-shortcodes" target="_blank" rel="noopener"
-&gt;Inline Shortcodes&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To enable emoji globally, set &lt;code&gt;enableEmoji&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt; in your site&amp;rsquo;s &lt;a class="link" href="https://gohugo.io/getting-started/configuration/" target="_blank" rel="noopener"
-&gt;configuration&lt;/a&gt; and then you can type emoji shorthand codes directly in content files; e.g.&lt;/p&gt;
-&lt;p&gt;&lt;span class="nowrap"&gt;&lt;span class="emojify"&gt;🙈&lt;/span&gt; &lt;code&gt;:see_no_evil:&lt;/code&gt;&lt;/span&gt; &lt;span class="nowrap"&gt;&lt;span class="emojify"&gt;🙉&lt;/span&gt; &lt;code&gt;:hear_no_evil:&lt;/code&gt;&lt;/span&gt; &lt;span class="nowrap"&gt;&lt;span class="emojify"&gt;🙊&lt;/span&gt; &lt;code&gt;:speak_no_evil:&lt;/code&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;br&gt;
-&lt;p&gt;The &lt;a class="link" href="http://www.emoji-cheat-sheet.com/" target="_blank" rel="noopener"
-&gt;Emoji cheat sheet&lt;/a&gt; is a useful reference for emoji shorthand codes.&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;N.B.&lt;/strong&gt; The above steps enable Unicode Standard emoji characters and sequences in Hugo, however the rendering of these glyphs depends on the browser and the platform. To style the emoji you can either use a third party emoji font or a font stack; e.g.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;span class="lnt"&gt;3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.emoji {
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; font-family: Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Segoe UI Symbol, Android Emoji, EmojiSymbols;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
 &lt;/div&gt;</description></item></channel></rss>
