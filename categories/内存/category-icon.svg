@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#4285F4" rx="10" ry="10"/>
+  <g fill="white">
+    <!-- RAM模块图形 -->
+    <rect x="40" y="50" width="120" height="20" rx="2" ry="2"/>
+    <rect x="40" y="80" width="120" height="20" rx="2" ry="2"/>
+    <rect x="40" y="110" width="120" height="20" rx="2" ry="2"/>
+    <rect x="40" y="140" width="120" height="20" rx="2" ry="2"/>
+    <!-- 连接线 -->
+    <rect x="50" y="70" width="5" height="10"/>
+    <rect x="70" y="70" width="5" height="10"/>
+    <rect x="90" y="70" width="5" height="10"/>
+    <rect x="110" y="70" width="5" height="10"/>
+    <rect x="130" y="70" width="5" height="10"/>
+    <rect x="145" y="70" width="5" height="10"/>
+    <!-- 下方连接线 -->
+    <rect x="50" y="100" width="5" height="10"/>
+    <rect x="70" y="100" width="5" height="10"/>
+    <rect x="90" y="100" width="5" height="10"/>
+    <rect x="110" y="100" width="5" height="10"/>
+    <rect x="130" y="100" width="5" height="10"/>
+    <rect x="145" y="100" width="5" height="10"/>
+    <!-- 下方连接线 -->
+    <rect x="50" y="130" width="5" height="10"/>
+    <rect x="70" y="130" width="5" height="10"/>
+    <rect x="90" y="130" width="5" height="10"/>
+    <rect x="110" y="130" width="5" height="10"/>
+    <rect x="130" y="130" width="5" height="10"/>
+    <rect x="145" y="130" width="5" height="10"/>
+  </g>
+</svg>

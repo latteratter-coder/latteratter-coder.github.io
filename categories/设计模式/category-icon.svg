@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#673AB7" rx="10" ry="10"/>
+  <g fill="white">
+    <!-- 设计模式图形 - 展示几种常见设计模式的简化表示 -->
+    
+    <!-- 单例模式 - 一个带锁的盒子 -->
+    <rect x="40" y="40" width="30" height="30" stroke="white" stroke-width="2" fill="none"/>
+    <circle cx="55" cy="55" r="8" fill="white"/>
+    <rect x="52" y="65" width="6" height="10" fill="white"/>
+    
+    <!-- 工厂模式 - 工厂图形 -->
+    <path d="M90,40 L120,40 L120,55 L115,60 L95,60 L90,55 Z" fill="white"/>
+    <rect x="95" y="60" width="20" height="10" fill="white"/>
+    <rect x="100" y="50" width="10" height="5" fill="#673AB7"/>
+    
+    <!-- 观察者模式 - 眼睛和连接线 -->
+    <circle cx="150" cy="50" r="15" fill="white"/>
+    <circle cx="150" cy="50" r="5" fill="#673AB7"/>
+    <line x1="150" y1="65" x2="150" y2="75" stroke="white" stroke-width="2"/>
+    <line x1="150" y1="75" x2="140" y2="85" stroke="white" stroke-width="2"/>
+    <line x1="150" y1="75" x2="160" y2="85" stroke="white" stroke-width="2"/>
+    
+    <!-- 装饰器模式 - 嵌套框 -->
+    <rect x="40" y="100" width="40" height="40" stroke="white" stroke-width="2" fill="none"/>
+    <rect x="50" y="110" width="40" height="40" stroke="white" stroke-width="2" fill="none"/>
+    <rect x="60" y="120" width="40" height="40" stroke="white" stroke-width="2" fill="none"/>
+    
+    <!-- 策略模式 - 分支路径 -->
+    <circle cx="140" cy="110" r="10" fill="white"/>
+    <line x1="140" y1="120" x2="120" y2="140" stroke="white" stroke-width="2"/>
+    <line x1="140" y1="120" x2="140" y2="140" stroke="white" stroke-width="2"/>
+    <line x1="140" y1="120" x2="160" y2="140" stroke="white" stroke-width="2"/>
+    <circle cx="120" cy="145" r="5" fill="white"/>
+    <circle cx="140" cy="145" r="5" fill="white"/>
+    <circle cx="160" cy="145" r="5" fill="white"/>
+  </g>
+</svg>

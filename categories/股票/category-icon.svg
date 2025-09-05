@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#FBBC05" rx="10" ry="10"/>
+  <g fill="white">
+    <!-- 股票走势图 -->
+    <polyline points="40,140 60,120 80,130 100,90 120,100 140,70 160,50" 
+             fill="none" stroke="white" stroke-width="4"/>
+    
+    <!-- 蜡烛图 -->
+    <rect x="50" y="110" width="10" height="20" fill="white"/>
+    <line x1="55" y1="105" x2="55" y2="110" stroke="white" stroke-width="2"/>
+    <line x1="55" y1="130" x2="55" y2="135" stroke="white" stroke-width="2"/>
+    
+    <rect x="70" y="120" width="10" height="15" fill="white"/>
+    <line x1="75" y1="115" x2="75" y2="120" stroke="white" stroke-width="2"/>
+    <line x1="75" y1="135" x2="75" y2="140" stroke="white" stroke-width="2"/>
+    
+    <rect x="90" y="80" width="10" height="25" fill="white"/>
+    <line x1="95" y1="75" x2="95" y2="80" stroke="white" stroke-width="2"/>
+    <line x1="95" y1="105" x2="95" y2="110" stroke="white" stroke-width="2"/>
+    
+    <rect x="110" y="90" width="10" height="20" fill="white"/>
+    <line x1="115" y1="85" x2="115" y2="90" stroke="white" stroke-width="2"/>
+    <line x1="115" y1="110" x2="115" y2="115" stroke="white" stroke-width="2"/>
+    
+    <rect x="130" y="60" width="10" height="30" fill="white"/>
+    <line x1="135" y1="55" x2="135" y2="60" stroke="white" stroke-width="2"/>
+    <line x1="135" y1="90" x2="135" y2="95" stroke="white" stroke-width="2"/>
+    
+    <!-- 坐标轴 -->
+    <line x1="40" y1="150" x2="160" y2="150" stroke="white" stroke-width="2"/>
+    <line x1="40" y1="40" x2="40" y2="150" stroke="white" stroke-width="2"/>
+  </g>
+</svg>
