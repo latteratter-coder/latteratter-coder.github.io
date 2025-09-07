@@ -429,23 +429,23 @@
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;flowchart TD
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;A[用户在Shell中输入命令] --&amp;gt; B[Shell解析命令&amp;lt;br&amp;gt;调用fork()创建子进程]
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;B --&amp;gt; C[子进程调用execve()系统调用]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;A[用户在Shell中输入命令] --&amp;gt; B[&amp;#34;Shell解析命令调用fork()创建子进程&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;B --&amp;gt; C[子进程调用execve系统调用]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;C --&amp;gt; D[&amp;#34;内核处理execve()请求&amp;#34;]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;subgraph D[内核处理流程]
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D1[验证文件&amp;lt;br&amp;gt;权限、格式等] --&amp;gt; D2[释放旧地址空间&amp;lt;br&amp;gt;“拆毁旧世界”]
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D2 --&amp;gt; D3[加载可执行文件&amp;lt;br&amp;gt;ELF解析、映射文本/数据段等]
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D3 --&amp;gt; D4[设置新堆栈&amp;lt;br&amp;gt;填充参数argv、环境变量envp]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D1[验证文件权限格式等] --&amp;gt; D2[释放旧地址空间&amp;lt;br&amp;gt;拆毁旧世界]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D2 --&amp;gt; D3[加载可执行文件&amp;lt;br&amp;gt;ELF解析映射文本/数据段等]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D3 --&amp;gt; D4[&amp;#34;设置新堆栈&amp;lt;br&amp;gt;填充参数argv、环境变量envp&amp;#34;]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; D4 --&amp;gt; D5[设置寄存器&amp;lt;br&amp;gt;将eip指向入口点]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;end
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;D --&amp;gt; E{&amp;#34;是否为动态链接程序?&amp;#34;}
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;E -- 是 --&amp;gt; F[载入解释器(ld-linux)&amp;lt;br&amp;gt;由解释器加载所需共享库]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;E -- 是 --&amp;gt; F[&amp;#34;载入解释器(ld-linux)&amp;#34;&amp;lt;br&amp;gt;由解释器加载所需共享库]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;E -- 否 --&amp;gt; G[跳转到程序入口点_start]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;F --&amp;gt; G
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;G --&amp;gt; H[执行用户程序的main()函数]
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;G --&amp;gt; H[&amp;#34;执行用户程序的main()函数&amp;#34;]
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;H --&amp;gt; I[程序正常执行]
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
