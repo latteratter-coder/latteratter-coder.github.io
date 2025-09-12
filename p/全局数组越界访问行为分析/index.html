@@ -1,0 +1,1375 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="全局数组越界访问行为分析报告 📋 目录 问题背景 测试环境 测试设计 实验结果 深入分析 安全性讨论 最佳实践建议 附录 问题背景 在C语言编程中，数组越界访问是一个常见且危险的问题。本报告专门研究以下场景：\n研究问题：在同一个进程中定义两个全局字符数组A、B（大小均为10），当数组A直接访问第12位（A[12]）时，程序是否会崩溃？能否正常访问？\n这个问题涉及到：\n全局变量的内存布局 操作系统的内存保护机制 编译器的内存对齐策略 未定义行为的实际表现 测试环境 项目 详情 操作系统 Linux 5.15.0-138-generic (Ubuntu) 架构 x86_64 编译器 GCC (GNU Compiler Collection) 编译选项 -Wall -Wextra -g -O0 测试工具 AddressSanitizer, Valgrind, objdump 测试设计 测试程序结构 1 2 3 4 5 6 7 8 9 10 11 // 全局数组定义 char A[10]; // 数组A，大小10字节 char B[10]; // 数组B，大小10字节 // 测试内容 1. 内存布局分析 2. 正常范围访问测试 3. 越界读取测试 (A[10] ~ A[15]) 4. 越界写入测试 (A[10] ~ A[12]) 5. 大范围越界测试 (A[10] ~ A[100]) 6. 段错误捕获机制 测试方法 基础测试：使用标准编译选项进行测试 内存检测：使用AddressSanitizer检测内存错误 符号分析：使用objdump分析内存布局 异常处理：实现信号处理机制捕获段错误 实验结果 🎯 核心结论 A[12] 不会崩溃，可以正常访问！\n"><title>全局数组越界访问行为分析</title><link rel=canonical href=https://zhangquanhua1.github.io/p/%E5%85%A8%E5%B1%80%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E8%AE%BF%E9%97%AE%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="全局数组越界访问行为分析"><meta property='og:description' content="全局数组越界访问行为分析报告 📋 目录 问题背景 测试环境 测试设计 实验结果 深入分析 安全性讨论 最佳实践建议 附录 问题背景 在C语言编程中，数组越界访问是一个常见且危险的问题。本报告专门研究以下场景：\n研究问题：在同一个进程中定义两个全局字符数组A、B（大小均为10），当数组A直接访问第12位（A[12]）时，程序是否会崩溃？能否正常访问？\n这个问题涉及到：\n全局变量的内存布局 操作系统的内存保护机制 编译器的内存对齐策略 未定义行为的实际表现 测试环境 项目 详情 操作系统 Linux 5.15.0-138-generic (Ubuntu) 架构 x86_64 编译器 GCC (GNU Compiler Collection) 编译选项 -Wall -Wextra -g -O0 测试工具 AddressSanitizer, Valgrind, objdump 测试设计 测试程序结构 1 2 3 4 5 6 7 8 9 10 11 // 全局数组定义 char A[10]; // 数组A，大小10字节 char B[10]; // 数组B，大小10字节 // 测试内容 1. 内存布局分析 2. 正常范围访问测试 3. 越界读取测试 (A[10] ~ A[15]) 4. 越界写入测试 (A[10] ~ A[12]) 5. 大范围越界测试 (A[10] ~ A[100]) 6. 段错误捕获机制 测试方法 基础测试：使用标准编译选项进行测试 内存检测：使用AddressSanitizer检测内存错误 符号分析：使用objdump分析内存布局 异常处理：实现信号处理机制捕获段错误 实验结果 🎯 核心结论 A[12] 不会崩溃，可以正常访问！\n"><meta property='og:url' content='https://zhangquanhua1.github.io/p/%E5%85%A8%E5%B1%80%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E8%AE%BF%E9%97%AE%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/'><meta property='og:site_name' content='二进制'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='内存'><meta property='article:published_time' content='2025-09-12T00:00:00+00:00'><meta property='article:modified_time' content='2025-09-12T00:00:00+00:00'><meta name=twitter:title content="全局数组越界访问行为分析"><meta name=twitter:description content="全局数组越界访问行为分析报告 📋 目录 问题背景 测试环境 测试设计 实验结果 深入分析 安全性讨论 最佳实践建议 附录 问题背景 在C语言编程中，数组越界访问是一个常见且危险的问题。本报告专门研究以下场景：\n研究问题：在同一个进程中定义两个全局字符数组A、B（大小均为10），当数组A直接访问第12位（A[12]）时，程序是否会崩溃？能否正常访问？\n这个问题涉及到：\n全局变量的内存布局 操作系统的内存保护机制 编译器的内存对齐策略 未定义行为的实际表现 测试环境 项目 详情 操作系统 Linux 5.15.0-138-generic (Ubuntu) 架构 x86_64 编译器 GCC (GNU Compiler Collection) 编译选项 -Wall -Wextra -g -O0 测试工具 AddressSanitizer, Valgrind, objdump 测试设计 测试程序结构 1 2 3 4 5 6 7 8 9 10 11 // 全局数组定义 char A[10]; // 数组A，大小10字节 char B[10]; // 数组B，大小10字节 // 测试内容 1. 内存布局分析 2. 正常范围访问测试 3. 越界读取测试 (A[10] ~ A[15]) 4. 越界写入测试 (A[10] ~ A[12]) 5. 大范围越界测试 (A[10] ~ A[100]) 6. 段错误捕获机制 测试方法 基础测试：使用标准编译选项进行测试 内存检测：使用AddressSanitizer检测内存错误 符号分析：使用objdump分析内存布局 异常处理：实现信号处理机制捕获段错误 实验结果 🎯 核心结论 A[12] 不会崩溃，可以正常访问！\n"><link rel="shortcut icon" href=/favicon.svg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><div class=site-meta><h1 class=site-name><a href=/>二进制</a></h1><h2 class=site-description>学无止境</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#-目录>📋 目录</a></li><li><a href=#问题背景>问题背景</a></li><li><a href=#测试环境>测试环境</a></li><li><a href=#测试设计>测试设计</a><ol><li><a href=#测试程序结构>测试程序结构</a></li><li><a href=#测试方法>测试方法</a></li></ol></li><li><a href=#实验结果>实验结果</a><ol><li><a href=#-核心结论>🎯 核心结论</a></li><li><a href=#详细测试数据>详细测试数据</a><ol><li><a href=#1-内存布局分析>1. 内存布局分析</a></li><li><a href=#2-越界访问测试结果>2. 越界访问测试结果</a></li><li><a href=#4-新增a数组改写b数组测试>4. <strong>新增：A数组改写B数组测试</strong></a></li><li><a href=#5-内存布局详细分析>5. 内存布局详细分析</a></li><li><a href=#6-原始内存内容分析>6. 原始内存内容分析</a></li></ol></li></ol></li><li><a href=#深入分析>深入分析</a><ol><li><a href=#-为什么a12不会崩溃为什么a可以改写b>🔍 为什么A[12]不会崩溃？为什么A可以改写B？</a><ol><li><a href=#1-内存段特性>1. 内存段特性</a></li><li><a href=#2-内存对齐机制>2. 内存对齐机制</a></li><li><a href=#3-操作系统保护机制>3. 操作系统保护机制</a></li></ol></li><li><a href=#-不同编译选项的影响>🧪 不同编译选项的影响</a><ol><li><a href=#addresssanitizer测试>AddressSanitizer测试</a></li><li><a href=#不同优化级别>不同优化级别</a></li></ol></li></ol></li><li><a href=#安全性讨论>安全性讨论</a><ol><li><a href=#-风险评估>⚠️ 风险评估</a><ol><li><a href=#1-数据破坏风险>1. 数据破坏风险</a></li><li><a href=#2-缓冲区溢出攻击>2. 缓冲区溢出攻击</a></li><li><a href=#3-调试困难>3. 调试困难</a></li></ol></li><li><a href=#-未定义行为的危险性>🛡️ 未定义行为的危险性</a></li></ol></li><li><a href=#最佳实践建议>最佳实践建议</a><ol><li><a href=#-安全编程实践>✅ 安全编程实践</a><ol><li><a href=#1-边界检查>1. 边界检查</a></li><li><a href=#2-使用安全的数据结构>2. 使用安全的数据结构</a></li><li><a href=#3-编译时检查>3. 编译时检查</a></li><li><a href=#4-代码审查清单>4. 代码审查清单</a></li></ol></li><li><a href=#-开发工具推荐>🔧 开发工具推荐</a></li></ol></li><li><a href=#附录>附录</a><ol><li><a href=#a-完整测试代码>A. 完整测试代码</a><ol><li><a href=#1-基础越界访问测试程序-array_bounds_testc>1. 基础越界访问测试程序 (<code>array_bounds_test.c</code>)</a></li><li><a href=#2-数组改写测试程序-array_overwrite_testc>2. 数组改写测试程序 (<code>array_overwrite_test.c</code>)</a></li><li><a href=#3-安全威胁演示程序-dangerous_democ>3. 安全威胁演示程序 (<code>dangerous_demo.c</code>)</a></li><li><a href=#4-编译脚本-makefile>4. 编译脚本 (<code>Makefile</code>)</a></li><li><a href=#5-代码使用说明>5. 代码使用说明</a></li></ol></li><li><a href=#b-编译和运行指令>B. 编译和运行指令</a></li><li><a href=#c-测试结果示例>C. 测试结果示例</a><ol><li><a href=#基础越界访问测试输出示例>基础越界访问测试输出示例：</a></li><li><a href=#数组改写测试输出示例>数组改写测试输出示例：</a></li><li><a href=#安全演示输出示例>安全演示输出示例：</a></li></ol></li><li><a href=#d-相关资源>D. 相关资源</a></li></ol></li><li><a href=#-结论>📝 结论</a><ol><li><a href=#-直接回答原问题>🎯 直接回答原问题：</a></li><li><a href=#-技术发现>🔬 技术发现：</a></li><li><a href=#-安全警告>⚠️ 安全警告：</a></li><li><a href=#-最佳实践>💡 最佳实践：</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%86%85%E5%AD%98/ style=background-color:#4285f4;color:#fff>内存</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E5%85%A8%E5%B1%80%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C%E8%AE%BF%E9%97%AE%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/>全局数组越界访问行为分析</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 12, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>14 minute read</time></div></footer></div></header><section class=article-content><h1 id=全局数组越界访问行为分析报告>全局数组越界访问行为分析报告</h1><h2 id=-目录>📋 目录</h2><ul><li><a class=link href=#%e9%97%ae%e9%a2%98%e8%83%8c%e6%99%af>问题背景</a></li><li><a class=link href=#%e6%b5%8b%e8%af%95%e7%8e%af%e5%a2%83>测试环境</a></li><li><a class=link href=#%e6%b5%8b%e8%af%95%e8%ae%be%e8%ae%a1>测试设计</a></li><li><a class=link href=#%e5%ae%9e%e9%aa%8c%e7%bb%93%e6%9e%9c>实验结果</a></li><li><a class=link href=#%e6%b7%b1%e5%85%a5%e5%88%86%e6%9e%90>深入分析</a></li><li><a class=link href=#%e5%ae%89%e5%85%a8%e6%80%a7%e8%ae%a8%e8%ae%ba>安全性讨论</a></li><li><a class=link href=#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%bb%ba%e8%ae%ae>最佳实践建议</a></li><li><a class=link href=#%e9%99%84%e5%bd%95>附录</a></li></ul><hr><h2 id=问题背景>问题背景</h2><p>在C语言编程中，数组越界访问是一个常见且危险的问题。本报告专门研究以下场景：</p><blockquote><p><strong>研究问题</strong>：在同一个进程中定义两个全局字符数组A、B（大小均为10），当数组A直接访问第12位（A[12]）时，程序是否会崩溃？能否正常访问？</p></blockquote><p>这个问题涉及到：</p><ul><li>全局变量的内存布局</li><li>操作系统的内存保护机制</li><li>编译器的内存对齐策略</li><li>未定义行为的实际表现</li></ul><hr><h2 id=测试环境>测试环境</h2><div class=table-wrapper><table><thead><tr><th>项目</th><th>详情</th></tr></thead><tbody><tr><td><strong>操作系统</strong></td><td>Linux 5.15.0-138-generic (Ubuntu)</td></tr><tr><td><strong>架构</strong></td><td>x86_64</td></tr><tr><td><strong>编译器</strong></td><td>GCC (GNU Compiler Collection)</td></tr><tr><td><strong>编译选项</strong></td><td><code>-Wall -Wextra -g -O0</code></td></tr><tr><td><strong>测试工具</strong></td><td>AddressSanitizer, Valgrind, objdump</td></tr></tbody></table></div><hr><h2 id=测试设计>测试设计</h2><h3 id=测试程序结构>测试程序结构</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// 全局数组定义
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>  <span class=c1>// 数组A，大小10字节
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>B</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>  <span class=c1>// 数组B，大小10字节
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=c1>// 测试内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=mf>1.</span> <span class=err>内存布局分析</span>
+</span></span><span class=line><span class=cl><span class=mf>2.</span> <span class=err>正常范围访问测试</span>
+</span></span><span class=line><span class=cl><span class=mf>3.</span> <span class=err>越界读取测试</span> <span class=p>(</span><span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>]</span> <span class=o>~</span> <span class=n>A</span><span class=p>[</span><span class=mi>15</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=mf>4.</span> <span class=err>越界写入测试</span> <span class=p>(</span><span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>]</span> <span class=o>~</span> <span class=n>A</span><span class=p>[</span><span class=mi>12</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=mf>5.</span> <span class=err>大范围越界测试</span> <span class=p>(</span><span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>]</span> <span class=o>~</span> <span class=n>A</span><span class=p>[</span><span class=mi>100</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=mf>6.</span> <span class=err>段错误捕获机制</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=测试方法>测试方法</h3><ol><li><strong>基础测试</strong>：使用标准编译选项进行测试</li><li><strong>内存检测</strong>：使用AddressSanitizer检测内存错误</li><li><strong>符号分析</strong>：使用objdump分析内存布局</li><li><strong>异常处理</strong>：实现信号处理机制捕获段错误</li></ol><hr><h2 id=实验结果>实验结果</h2><h3 id=-核心结论>🎯 核心结论</h3><blockquote><p><strong>A[12] 不会崩溃，可以正常访问！</strong></p><p><strong>A数组可以直接改写B数组的内容！</strong></p></blockquote><h3 id=详细测试数据>详细测试数据</h3><h4 id=1-内存布局分析>1. 内存布局分析</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>=== 数组信息 ===
+</span></span><span class=line><span class=cl>数组A地址: 0x564e0133f120
+</span></span><span class=line><span class=cl>数组B地址: 0x564e0133f110  
+</span></span><span class=line><span class=cl>数组A大小: 10 字节
+</span></span><span class=line><span class=cl>数组B大小: 10 字节
+</span></span><span class=line><span class=cl>A和B之间的距离: -16 字节
+</span></span></code></pre></td></tr></table></div></div><p><strong>符号表信息</strong>（通过objdump获取）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>0000000000004110 g     O .bss   000000000000000a              B
+</span></span><span class=line><span class=cl>0000000000004120 g     O .bss   000000000000000a              A
+</span></span></code></pre></td></tr></table></div></div><h4 id=2-越界访问测试结果>2. 越界访问测试结果</h4><div class=table-wrapper><table><thead><tr><th>访问位置</th><th>读取结果</th><th>写入结果</th><th>是否崩溃</th></tr></thead><tbody><tr><td>A[10]</td><td>✅ 成功</td><td>✅ 成功</td><td>❌ 无崩溃</td></tr><tr><td>A[11]</td><td>✅ 成功</td><td>✅ 成功</td><td>❌ 无崩溃</td></tr><tr><td><strong>A[12]</strong></td><td><strong>✅ 成功</strong></td><td><strong>✅ 成功</strong></td><td><strong>❌ 无崩溃</strong></td></tr><tr><td>A[13-15]</td><td>✅ 成功</td><td>-</td><td>❌ 无崩溃</td></tr><tr><td>A[20-100]</td><td>✅ 成功</td><td>-</td><td>❌ 无崩溃</td></tr></tbody></table></div><h4 id=4-新增a数组改写b数组测试>4. <strong>新增：A数组改写B数组测试</strong></h4><div class=table-wrapper><table><thead><tr><th>测试方法</th><th>访问方式</th><th>结果</th><th>说明</th></tr></thead><tbody><tr><td><strong>负索引访问</strong></td><td>A[-16]</td><td>✅ <strong>成功改写B[0]</strong></td><td>B在A前16字节</td></tr><tr><td><strong>系统性测试</strong></td><td>A[-16] ~ A[-7]</td><td>✅ <strong>完全控制B数组</strong></td><td>可改写B[0] ~ B[9]</td></tr><tr><td><strong>AddressSanitizer</strong></td><td>A[-20]</td><td>❌ <strong>检测到溢出</strong></td><td>全局缓冲区溢出错误</td></tr></tbody></table></div><h4 id=5-内存布局详细分析>5. 内存布局详细分析</h4><p><strong>实际内存布局</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>内存地址从低到高：
+</span></span><span class=line><span class=cl>┌─────────────┬─────────────┬─────────────┐
+</span></span><span class=line><span class=cl>│   数组B     │   填充区域   │   数组A     │
+</span></span><span class=line><span class=cl>│ (10字节)    │  (6字节)    │ (10字节)    │
+</span></span><span class=line><span class=cl>│0x...1110   │             │0x...1120   │
+</span></span><span class=line><span class=cl>└─────────────┴─────────────┴─────────────┘
+</span></span><span class=line><span class=cl>      ↑                           ↑
+</span></span><span class=line><span class=cl>   A[-16]~A[-7]              A[0]~A[9]
+</span></span><span class=line><span class=cl>   可以改写B[0]~B[9]         正常A数组范围
+</span></span></code></pre></td></tr></table></div></div><p><strong>关键发现</strong>：</p><ul><li>B数组在A数组前面16字节</li><li>A[-16] 对应 B[0]，A[-15] 对应 B[1]，以此类推</li><li>A[-16] ~ A[-7] 可以完全控制B数组的所有10个元素</li></ul><h4 id=6-原始内存内容分析>6. 原始内存内容分析</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>从A[0]开始的20个字节内容:
+</span></span><span class=line><span class=cl>偏移 0: 地址0x564e0133f120, 值=A (ASCII: 65)
+</span></span><span class=line><span class=cl>偏移 1: 地址0x564e0133f121, 值=B (ASCII: 66)
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>偏移 9: 地址0x564e0133f129, 值=J (ASCII: 74)
+</span></span><span class=line><span class=cl>偏移10: 地址0x564e0133f12a, 值=X (ASCII: 88)  ← A[10]写入成功
+</span></span><span class=line><span class=cl>偏移11: 地址0x564e0133f12b, 值=X (ASCII: 88)  ← A[11]写入成功
+</span></span><span class=line><span class=cl>偏移12: 地址0x564e0133f12c, 值=X (ASCII: 88)  ← A[12]写入成功
+</span></span><span class=line><span class=cl>偏移13: 地址0x564e0133f12d, 值=? (ASCII:  0)
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=深入分析>深入分析</h2><h3 id=-为什么a12不会崩溃为什么a可以改写b>🔍 为什么A[12]不会崩溃？为什么A可以改写B？</h3><h4 id=1-内存段特性>1. 内存段特性</h4><p><strong>全局数组位于.bss段</strong></p><ul><li><code>.bss段</code>：存储未初始化的全局和静态变量</li><li><strong>连续内存</strong>：同一段内的变量通常分配在连续内存中</li><li><strong>零初始化</strong>：.bss段在程序启动时被零初始化</li></ul><h4 id=2-内存对齐机制>2. 内存对齐机制</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>内存布局示意图：
+</span></span><span class=line><span class=cl>┌─────────────┬─────────────┬─────────────┐
+</span></span><span class=line><span class=cl>│   数组B     │   填充区域   │   数组A     │
+</span></span><span class=line><span class=cl>│ (10字节)    │  (6字节)    │ (10字节)    │
+</span></span><span class=line><span class=cl>│0x...4110   │             │0x...4120   │
+</span></span><span class=line><span class=cl>└─────────────┴─────────────┴─────────────┘
+</span></span><span class=line><span class=cl>              ↑
+</span></span><span class=line><span class=cl>         A[10], A[11], A[12]
+</span></span><span class=line><span class=cl>         访问这个区域
+</span></span></code></pre></td></tr></table></div></div><p><strong>编译器对齐策略</strong>：</p><ul><li>为了性能优化，编译器会进行内存对齐</li><li>在数组之间可能插入填充字节</li><li>这些填充区域通常可以安全访问</li></ul><h4 id=3-操作系统保护机制>3. 操作系统保护机制</h4><p><strong>页级内存保护</strong>：</p><ul><li>Linux内存保护以页为单位（通常4KB）</li><li>小范围越界（几个字节）不会跨越页边界</li><li>只要在同一页内，不会触发段错误</li></ul><p><strong>虚拟内存管理</strong>：</p><ul><li>全局变量在进程启动时就分配好内存</li><li>.bss段通常有较大的连续空间</li><li>越界访问仍在进程的合法地址空间内</li></ul><h3 id=-不同编译选项的影响>🧪 不同编译选项的影响</h3><h4 id=addresssanitizer测试>AddressSanitizer测试</h4><p><strong>越界访问测试</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>gcc -fsanitize<span class=o>=</span>address -o <span class=nb>test</span> test.c
+</span></span><span class=line><span class=cl>./test
+</span></span><span class=line><span class=cl><span class=c1># 结果：A[12]访问仍然没有检测到错误</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>改写B数组测试</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 当测试A[-20]时，AddressSanitizer检测到错误：</span>
+</span></span><span class=line><span class=cl>ERROR: AddressSanitizer: global-buffer-overflow
+</span></span><span class=line><span class=cl>WRITE of size <span class=m>1</span> at 0x5574cb8f61dc thread T0
+</span></span><span class=line><span class=cl>SUMMARY: AddressSanitizer: global-buffer-overflow
+</span></span></code></pre></td></tr></table></div></div><p><strong>原因分析</strong>：</p><ul><li>AddressSanitizer对全局数组的小范围越界检测不够敏感</li><li>但对于较大范围的越界访问（如A[-20]）能够检测到</li><li>A[-16] ~ A[-7]的访问没有被检测到，说明在"安全"范围内</li></ul><h4 id=不同优化级别>不同优化级别</h4><ul><li><strong>-O0</strong>：无优化，越界访问成功</li><li><strong>-O2/-O3</strong>：可能改变内存布局，但通常仍可访问</li></ul><hr><h2 id=安全性讨论>安全性讨论</h2><h3 id=-风险评估>⚠️ 风险评估</h3><h4 id=1-数据破坏风险>1. 数据破坏风险</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// 危险示例
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>A</span><span class=p>[</span><span class=mi>12</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;X&#39;</span><span class=p>;</span>  <span class=c1>// 可能覆盖其他重要数据
+</span></span></span></code></pre></td></tr></table></div></div><h4 id=2-缓冲区溢出攻击>2. 缓冲区溢出攻击</h4><ul><li>虽然不会立即崩溃，但可能被恶意利用</li><li>攻击者可能通过越界写入注入恶意代码</li><li><strong>特别危险</strong>：A数组可以完全控制B数组，如果B数组存储敏感信息（如密码、权限标志），后果严重</li></ul><h4 id=3-调试困难>3. 调试困难</h4><ul><li>越界访问可能导致难以重现的bug</li><li>数据损坏可能在很久之后才表现出来</li></ul><h3 id=-未定义行为的危险性>🛡️ 未定义行为的危险性</h3><p><strong>C标准观点</strong>：</p><blockquote><p>数组越界访问是未定义行为（Undefined Behavior），编译器和运行时环境不保证任何特定的行为。</p></blockquote><p><strong>实际影响</strong>：</p><ol><li><strong>编译器差异</strong>：不同编译器可能有不同的内存布局</li><li><strong>平台差异</strong>：不同操作系统、架构可能表现不同</li><li><strong>版本差异</strong>：同一编译器的不同版本可能改变行为</li><li><strong>优化影响</strong>：编译器优化可能改变内存布局</li></ol><hr><h2 id=最佳实践建议>最佳实践建议</h2><h3 id=-安全编程实践>✅ 安全编程实践</h3><h4 id=1-边界检查>1. 边界检查</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// 推荐做法
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>safe_array_access</span><span class=p>(</span><span class=kt>char</span><span class=o>*</span> <span class=n>arr</span><span class=p>,</span> <span class=kt>int</span> <span class=n>size</span><span class=p>,</span> <span class=kt>int</span> <span class=n>index</span><span class=p>,</span> <span class=kt>char</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>index</span> <span class=o>&gt;=</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=n>index</span> <span class=o>&lt;</span> <span class=n>size</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>arr</span><span class=p>[</span><span class=n>index</span><span class=p>]</span> <span class=o>=</span> <span class=n>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>fprintf</span><span class=p>(</span><span class=n>stderr</span><span class=p>,</span> <span class=s>&#34;数组越界：索引 %d 超出范围 [0, %d)</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>index</span><span class=p>,</span> <span class=n>size</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=2-使用安全的数据结构>2. 使用安全的数据结构</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=c1>// 使用结构体封装数组
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>typedef</span> <span class=k>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>char</span> <span class=n>data</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>size</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=n>SafeArray</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>safe_set</span><span class=p>(</span><span class=n>SafeArray</span><span class=o>*</span> <span class=n>arr</span><span class=p>,</span> <span class=kt>int</span> <span class=n>index</span><span class=p>,</span> <span class=kt>char</span> <span class=n>value</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>index</span> <span class=o>&gt;=</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=n>index</span> <span class=o>&lt;</span> <span class=n>arr</span><span class=o>-&gt;</span><span class=n>size</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>arr</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>[</span><span class=n>index</span><span class=p>]</span> <span class=o>=</span> <span class=n>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>  <span class=c1>// 成功
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>  <span class=c1>// 失败
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=3-编译时检查>3. 编译时检查</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 启用所有警告</span>
+</span></span><span class=line><span class=cl>gcc -Wall -Wextra -Werror -o program program.c
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用静态分析工具</span>
+</span></span><span class=line><span class=cl>gcc -fanalyzer -o program program.c
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用运行时检查</span>
+</span></span><span class=line><span class=cl>gcc -fsanitize<span class=o>=</span>address -fsanitize<span class=o>=</span>bounds -o program program.c
+</span></span></code></pre></td></tr></table></div></div><h4 id=4-代码审查清单>4. 代码审查清单</h4><ul><li><input disabled type=checkbox> 所有数组访问都有边界检查</li><li><input disabled type=checkbox> 使用<code>sizeof()</code>而不是硬编码数组大小</li><li><input disabled type=checkbox> 循环边界正确设置</li><li><input disabled type=checkbox> 指针运算有范围验证</li></ul><h3 id=-开发工具推荐>🔧 开发工具推荐</h3><div class=table-wrapper><table><thead><tr><th>工具</th><th>用途</th><th>命令示例</th></tr></thead><tbody><tr><td><strong>AddressSanitizer</strong></td><td>内存错误检测</td><td><code>gcc -fsanitize=address</code></td></tr><tr><td><strong>Valgrind</strong></td><td>内存泄漏检测</td><td><code>valgrind --tool=memcheck ./program</code></td></tr><tr><td><strong>Clang Static Analyzer</strong></td><td>静态代码分析</td><td><code>clang --analyze program.c</code></td></tr><tr><td><strong>Cppcheck</strong></td><td>静态分析</td><td><code>cppcheck program.c</code></td></tr></tbody></table></div><hr><h2 id=附录>附录</h2><h3 id=a-完整测试代码>A. 完整测试代码</h3><h4 id=1-基础越界访问测试程序-array_bounds_testc>1. 基础越界访问测试程序 (<code>array_bounds_test.c</code>)</h4><p>这是最基础的测试程序，验证A[12]是否可以访问：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;setjmp.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1>// 定义两个全局字符数组，大小为10
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=kt>char</span> <span class=n>B</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 用于捕获段错误的跳转缓冲区
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>static</span> <span class=n>jmp_buf</span> <span class=n>segfault_buf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>static</span> <span class=kt>int</span> <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 段错误信号处理函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>segfault_handler</span><span class=p>(</span><span class=kt>int</span> <span class=n>sig</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nf>longjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_array_info</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 数组信息 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组A地址: %p</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>void</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B地址: %p</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>void</span><span class=o>*</span><span class=p>)</span><span class=n>B</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组A大小: %zu 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>A</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B大小: %zu 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>B</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A和B之间的距离: %ld 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>initialize_arrays</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 初始化数组A
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;A&#39;</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>  <span class=c1>// A[0]=&#39;A&#39;, A[1]=&#39;B&#39;, ..., A[9]=&#39;J&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 初始化数组B
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>  <span class=c1>// B[0]=&#39;a&#39;, B[1]=&#39;b&#39;, ..., B[9]=&#39;j&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 数组初始化完成 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组A内容: &#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%c &#34;</span><span class=p>,</span> <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B内容: &#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%c &#34;</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>test_array_access</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 测试数组访问 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 测试正常访问
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;正常访问测试:</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[0] = %c</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>A</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[9] = %c</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>A</span><span class=p>[</span><span class=mi>9</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;B[0] = %c</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;B[9] = %c</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=mi>9</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 测试越界访问
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;越界访问测试:</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置信号处理器
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>signal</span><span class=p>(</span><span class=n>SIGSEGV</span><span class=p>,</span> <span class=n>segfault_handler</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 测试访问A[10], A[11], A[12]等
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=mi>15</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nf>setjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 尝试读取
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=kt>char</span> <span class=n>value</span> <span class=o>=</span> <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[%d] = %c (ASCII: %d) - 成功读取</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>                   <span class=p>(</span><span class=n>value</span> <span class=o>&gt;=</span> <span class=mi>32</span> <span class=o>&amp;&amp;</span> <span class=n>value</span> <span class=o>&lt;=</span> <span class=mi>126</span><span class=p>)</span> <span class=o>?</span> <span class=nl>value</span> <span class=p>:</span> <span class=sc>&#39;?&#39;</span><span class=p>,</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=n>value</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[%d] - 访问时发生段错误！</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 测试写入越界位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;越界写入测试:</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=mi>12</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nf>setjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;X&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[%d] = &#39;X&#39; - 成功写入</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[%d] - 写入时发生段错误！</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 检查B数组是否被影响
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;检查B数组是否被影响:</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B当前内容: &#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%c &#34;</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>test_memory_layout</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 内存布局分析 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 显示内存中的实际内容
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;从A[0]开始的20个字节内容:</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>20</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>char</span><span class=o>*</span> <span class=n>ptr</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;偏移%2d: 地址%p, 值=%c (ASCII:%3d)</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>               <span class=n>i</span><span class=p>,</span> <span class=p>(</span><span class=kt>void</span><span class=o>*</span><span class=p>)</span><span class=n>ptr</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>               <span class=p>(</span><span class=o>*</span><span class=n>ptr</span> <span class=o>&gt;=</span> <span class=mi>32</span> <span class=o>&amp;&amp;</span> <span class=o>*</span><span class=n>ptr</span> <span class=o>&lt;=</span> <span class=mi>126</span><span class=p>)</span> <span class=o>?</span> <span class=o>*</span><span class=nl>ptr</span> <span class=p>:</span> <span class=sc>&#39;?&#39;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>               <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=o>*</span><span class=n>ptr</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 检查A和B的相对位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>((</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span> <span class=o>&gt;</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>long</span> <span class=n>distance</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;B数组在A数组之后 %ld 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>distance</span> <span class=o>==</span> <span class=mi>10</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A和B在内存中是连续的！A[10]实际上就是B[0]</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>distance</span> <span class=o>&lt;</span> <span class=mi>20</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A和B在内存中很接近，可能存在重叠访问</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>long</span> <span class=n>distance</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A数组在B数组之后 %ld 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;全局字符数组越界访问测试程序</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=====================================</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>print_array_info</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nf>initialize_arrays</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nf>test_array_access</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nf>test_memory_layout</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 测试总结 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;1. 全局数组通常分配在数据段(.data或.bss)</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;2. 编译器可能会将相邻声明的全局数组放在连续内存中</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;3. 越界访问可能不会立即崩溃，但会导致未定义行为</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;4. 实际行为取决于编译器、链接器和运行时环境</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;5. 在生产代码中应该避免任何形式的越界访问</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=2-数组改写测试程序-array_overwrite_testc>2. 数组改写测试程序 (<code>array_overwrite_test.c</code>)</h4><p>这个程序专门测试A数组是否可以改写B数组的内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;signal.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;setjmp.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1>// 定义两个全局字符数组，大小为10
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>A</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=kt>char</span> <span class=n>B</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 用于捕获段错误的跳转缓冲区
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>static</span> <span class=n>jmp_buf</span> <span class=n>segfault_buf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>static</span> <span class=kt>int</span> <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 段错误信号处理函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>segfault_handler</span><span class=p>(</span><span class=kt>int</span> <span class=n>sig</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nf>longjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_memory_layout</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 内存布局信息 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组A地址: %p</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>void</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B地址: %p</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>void</span><span class=o>*</span><span class=p>)</span><span class=n>B</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A和B之间的距离: %ld 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 判断A和B的相对位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=p>((</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span> <span class=o>&lt;</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;内存布局: A在前，B在后</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A[10]及以后可能影响B数组</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;内存布局: B在前，A在后</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A的负索引可能影响B数组</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>initialize_arrays</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 初始化数组 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 初始化数组A
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;A&#39;</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>  <span class=c1>// A[0]=&#39;A&#39;, A[1]=&#39;B&#39;, ..., A[9]=&#39;J&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 初始化数组B
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>  <span class=c1>// B[0]=&#39;a&#39;, B[1]=&#39;b&#39;, ..., B[9]=&#39;j&#39;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组A初始内容: &#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%c &#34;</span><span class=p>,</span> <span class=n>A</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;数组B初始内容: &#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%c &#34;</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>test_overwrite_via_negative_index</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 测试通过负索引改写B数组 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=kt>long</span> <span class=n>distance</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>A</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>b_changed</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>distance</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// A在B后面，尝试通过A的负索引访问B
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;A在B后面，距离%ld字节，尝试通过A[-%ld]访问B[0]</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nf>setjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>char</span> <span class=n>old_b0</span> <span class=o>=</span> <span class=n>B</span><span class=p>[</span><span class=mi>0</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=n>A</span><span class=p>[</span><span class=o>-</span><span class=n>distance</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;Y&#39;</span><span class=p>;</span>  <span class=c1>// 尝试通过A的负索引修改B[0]
+</span></span></span><span class=line><span class=cl><span class=c1></span>            
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>B</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>!=</span> <span class=n>old_b0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;✅ 成功！A[-%ld] = &#39;Y&#39; 改变了B[0]: &#39;%c&#39; -&gt; &#39;%c&#39;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>                       <span class=n>distance</span><span class=p>,</span> <span class=n>old_b0</span><span class=p>,</span> <span class=n>B</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                <span class=n>b_changed</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;❌ A[-%ld] = &#39;Y&#39; 没有影响B[0]</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;❌ 访问A[-%ld]时发生段错误</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;B在A后面，无法通过负索引直接访问B</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>b_changed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>test_systematic_overwrite</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 系统性测试：寻找能影响B的A索引 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 重新初始化数组
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>initialize_arrays</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;测试范围：A[-20] 到 A[30]</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>offset</span> <span class=o>=</span> <span class=o>-</span><span class=mi>20</span><span class=p>;</span> <span class=n>offset</span> <span class=o>&lt;=</span> <span class=mi>30</span><span class=p>;</span> <span class=n>offset</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 保存B数组的原始状态
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kt>char</span> <span class=n>original_b</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=nf>memcpy</span><span class=p>(</span><span class=n>original_b</span><span class=p>,</span> <span class=n>B</span><span class=p>,</span> <span class=mi>10</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=n>segfault_occurred</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nf>setjmp</span><span class=p>(</span><span class=n>segfault_buf</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 尝试写入一个特殊值
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>A</span><span class=p>[</span><span class=n>offset</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;Z&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>            <span class=c1>// 检查B数组是否被改变
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=kt>int</span> <span class=n>b_index_changed</span> <span class=o>=</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>B</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>!=</span> <span class=n>original_b</span><span class=p>[</span><span class=n>i</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>b_index_changed</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>b_index_changed</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;🎯 A[%d] = &#39;Z&#39; 影响了B[%d]: &#39;%c&#39; -&gt; &#39;%c&#39;</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>                       <span class=n>offset</span><span class=p>,</span> <span class=n>b_index_changed</span><span class=p>,</span> <span class=n>original_b</span><span class=p>[</span><span class=n>b_index_changed</span><span class=p>],</span> <span class=n>B</span><span class=p>[</span><span class=n>b_index_changed</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                
+</span></span><span class=line><span class=cl>                <span class=c1>// 恢复B数组
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>B</span><span class=p>[</span><span class=n>b_index_changed</span><span class=p>]</span> <span class=o>=</span> <span class=n>original_b</span><span class=p>[</span><span class=n>b_index_changed</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;💥 A[%d] 访问时发生段错误</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>offset</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ... 其他函数省略 ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;全局数组A改写数组B测试程序</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;================================</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>print_memory_layout</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nf>initialize_arrays</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>negative_success</span> <span class=o>=</span> <span class=nf>test_overwrite_via_negative_index</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=nf>test_systematic_overwrite</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;=== 测试总结 ===</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;1. 通过负索引改写B: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>negative_success</span> <span class=o>?</span> <span class=s>&#34;成功&#34;</span> <span class=o>:</span> <span class=s>&#34;失败&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;2. A数组%s直接改写B数组的内容</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>           <span class=n>negative_success</span> <span class=o>?</span> <span class=s>&#34;可以&#34;</span> <span class=o>:</span> <span class=s>&#34;无法&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;3. 这种行为是未定义的，不应在生产代码中使用</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=3-安全威胁演示程序-dangerous_democ>3. 安全威胁演示程序 (<code>dangerous_demo.c</code>)</h4><p>这个程序演示了数组越界访问如何被恶意利用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;string.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1>// 模拟一个真实的安全场景
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>user_input</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>        <span class=c1>// 用户输入缓冲区
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>char</span> <span class=n>admin_flag</span><span class=p>[</span><span class=mi>10</span><span class=p>];</span>        <span class=c1>// 管理员权限标志
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>initialize_system</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 初始化管理员标志为&#34;NOADMIN&#34;
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>strcpy</span><span class=p>(</span><span class=n>admin_flag</span><span class=p>,</span> <span class=s>&#34;NOADMIN&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;系统初始化完成</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;管理员权限: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>admin_flag</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>process_user_input</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span><span class=o>*</span> <span class=n>input</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>处理用户输入: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>input</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 危险的操作：没有边界检查的复制
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>input</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>!=</span> <span class=sc>&#39;\0&#39;</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>user_input</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>input</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>  <span class=c1>// 潜在的缓冲区溢出
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;用户输入已保存</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>check_admin_privileges</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>检查管理员权限...</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;当前管理员标志: %s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>admin_flag</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nf>strncmp</span><span class=p>(</span><span class=n>admin_flag</span><span class=p>,</span> <span class=s>&#34;ADMIN&#34;</span><span class=p>,</span> <span class=mi>5</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;🔓 管理员权限已激活！可以执行特权操作。</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;🔒 普通用户权限，无法执行特权操作。</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;危险的数组越界访问演示</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;========================</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>initialize_system</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 正常的用户输入
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>--- 测试1: 正常输入 ---</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>process_user_input</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>check_admin_privileges</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 危险的长输入，可能覆盖admin_flag
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>--- 测试2: 长输入（可能的攻击）---</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 计算需要多少字符才能到达admin_flag
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>long</span> <span class=n>distance</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>admin_flag</span> <span class=o>-</span> <span class=p>(</span><span class=kt>char</span><span class=o>*</span><span class=p>)</span><span class=n>user_input</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>distance</span> <span class=o>&gt;</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=n>distance</span> <span class=o>&lt;</span> <span class=mi>50</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;尝试通过长输入覆盖admin_flag...</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=c1>// 构造恶意输入
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=kt>char</span> <span class=n>malicious_input</span><span class=p>[</span><span class=mi>100</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=nf>memset</span><span class=p>(</span><span class=n>malicious_input</span><span class=p>,</span> <span class=sc>&#39;X&#39;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>  <span class=c1>// 填充到admin_flag位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nf>strcpy</span><span class=p>(</span><span class=n>malicious_input</span> <span class=o>+</span> <span class=n>distance</span><span class=p>,</span> <span class=s>&#34;ADMIN&#34;</span><span class=p>);</span>  <span class=c1>// 在admin_flag位置写入&#34;ADMIN&#34;
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>malicious_input</span><span class=p>[</span><span class=n>distance</span> <span class=o>+</span> <span class=mi>5</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;\0&#39;</span><span class=p>;</span>  <span class=c1>// 确保字符串结束
+</span></span></span><span class=line><span class=cl><span class=c1></span>        
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;恶意输入长度: %ld 字节</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=nf>strlen</span><span class=p>(</span><span class=n>malicious_input</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=nf>process_user_input</span><span class=p>(</span><span class=n>malicious_input</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nf>check_admin_privileges</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>💀 攻击成功！通过缓冲区溢出获得了管理员权限！</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;当前内存布局不适合演示攻击（距离：%ld）</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>distance</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;</span><span class=se>\n</span><span class=s>⚠️  这个演示展示了为什么数组越界访问如此危险！</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nf>printf</span><span class=p>(</span><span class=s>&#34;⚠️  在真实的程序中，这种漏洞可能被恶意利用来获取系统权限。</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=4-编译脚本-makefile>4. 编译脚本 (<code>Makefile</code>)</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=nv>CC</span> <span class=o>=</span> gcc
+</span></span><span class=line><span class=cl><span class=nv>CFLAGS</span> <span class=o>=</span> -Wall -Wextra -g -O0
+</span></span><span class=line><span class=cl><span class=nv>TARGET</span> <span class=o>=</span> array_bounds_test
+</span></span><span class=line><span class=cl><span class=nv>SOURCE</span> <span class=o>=</span> array_bounds_test.c
+</span></span><span class=line><span class=cl><span class=nv>OVERWRITE_TARGET</span> <span class=o>=</span> array_overwrite_test
+</span></span><span class=line><span class=cl><span class=nv>OVERWRITE_SOURCE</span> <span class=o>=</span> array_overwrite_test.c
+</span></span><span class=line><span class=cl><span class=nv>DEMO_TARGET</span> <span class=o>=</span> dangerous_demo
+</span></span><span class=line><span class=cl><span class=nv>DEMO_SOURCE</span> <span class=o>=</span> dangerous_demo.c
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 默认目标
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>all</span><span class=o>:</span> <span class=k>$(</span><span class=nv>TARGET</span><span class=k>)</span> <span class=k>$(</span><span class=nv>OVERWRITE_TARGET</span><span class=k>)</span> <span class=k>$(</span><span class=nv>DEMO_TARGET</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 编译目标
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>$(TARGET)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>CC<span class=k>)</span> <span class=k>$(</span>CFLAGS<span class=k>)</span> -o <span class=k>$(</span>TARGET<span class=k>)</span> <span class=k>$(</span>SOURCE<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 编译改写测试程序
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>$(OVERWRITE_TARGET)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>OVERWRITE_SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>CC<span class=k>)</span> <span class=k>$(</span>CFLAGS<span class=k>)</span> -o <span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span> <span class=k>$(</span>OVERWRITE_SOURCE<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 编译危险演示程序
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>$(DEMO_TARGET)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>DEMO_SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>CC<span class=k>)</span> <span class=k>$(</span>CFLAGS<span class=k>)</span> -o <span class=k>$(</span>DEMO_TARGET<span class=k>)</span> <span class=k>$(</span>DEMO_SOURCE<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 运行测试
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>run</span><span class=o>:</span> <span class=k>$(</span><span class=nv>TARGET</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	./<span class=k>$(</span>TARGET<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 运行改写测试
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>run-overwrite</span><span class=o>:</span> <span class=k>$(</span><span class=nv>OVERWRITE_TARGET</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	./<span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 运行危险演示
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>run-demo</span><span class=o>:</span> <span class=k>$(</span><span class=nv>DEMO_TARGET</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	./<span class=k>$(</span>DEMO_TARGET<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 使用AddressSanitizer编译
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>asan</span><span class=o>:</span> <span class=k>$(</span><span class=nv>SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>CC<span class=k>)</span> <span class=k>$(</span>CFLAGS<span class=k>)</span> -fsanitize<span class=o>=</span>address -o <span class=k>$(</span>TARGET<span class=k>)</span>_asan <span class=k>$(</span>SOURCE<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 使用AddressSanitizer编译改写测试
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>asan-overwrite</span><span class=o>:</span> <span class=k>$(</span><span class=nv>OVERWRITE_SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>CC<span class=k>)</span> <span class=k>$(</span>CFLAGS<span class=k>)</span> -fsanitize<span class=o>=</span>address -o <span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span>_asan <span class=k>$(</span>OVERWRITE_SOURCE<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 运行AddressSanitizer版本
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>run-asan</span><span class=o>:</span> <span class=n>asan</span>
+</span></span><span class=line><span class=cl>	./<span class=k>$(</span>TARGET<span class=k>)</span>_asan
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 运行AddressSanitizer改写测试版本
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>run-asan-overwrite</span><span class=o>:</span> <span class=n>asan</span>-<span class=n>overwrite</span>
+</span></span><span class=line><span class=cl>	./<span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span>_asan
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 清理
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>clean</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	rm -f <span class=k>$(</span>TARGET<span class=k>)</span> <span class=k>$(</span>TARGET<span class=k>)</span>_asan <span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span> <span class=k>$(</span>OVERWRITE_TARGET<span class=k>)</span>_asan <span class=k>$(</span>DEMO_TARGET<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 显示帮助
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>help</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;可用的目标:&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  all                - 编译所有程序&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  run                - 编译并运行越界访问测试程序&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  run-overwrite      - 编译并运行数组改写测试程序&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  run-demo           - 编译并运行危险演示程序&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  valgrind           - 使用valgrind运行越界访问测试&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  asan               - 使用AddressSanitizer编译越界访问测试&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  asan-overwrite     - 使用AddressSanitizer编译改写测试&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  run-asan           - 运行AddressSanitizer版本的越界访问测试&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  run-asan-overwrite - 运行AddressSanitizer版本的改写测试&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  clean              - 清理生成的文件&#34;</span>
+</span></span><span class=line><span class=cl>	@echo <span class=s2>&#34;  help               - 显示此帮助信息&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>all</span> <span class=n>run</span> <span class=n>run</span>-<span class=n>overwrite</span> <span class=n>run</span>-<span class=n>demo</span> <span class=n>valgrind</span> <span class=n>asan</span> <span class=n>asan</span>-<span class=n>overwrite</span> <span class=n>run</span>-<span class=n>asan</span> <span class=n>run</span>-<span class=n>asan</span>-<span class=n>overwrite</span> <span class=n>clean</span> <span class=n>help</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=5-代码使用说明>5. 代码使用说明</h4><p><strong>快速开始</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 下载所有代码文件到同一目录</span>
+</span></span><span class=line><span class=cl><span class=c1># 2. 确保系统安装了GCC编译器</span>
+</span></span><span class=line><span class=cl><span class=c1># 3. 运行以下命令：</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 编译所有程序</span>
+</span></span><span class=line><span class=cl>make all
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运行基础测试（验证A[12]访问）</span>
+</span></span><span class=line><span class=cl>make run
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运行改写测试（验证A改写B）</span>
+</span></span><span class=line><span class=cl>make run-overwrite
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运行安全演示（权限提升攻击）</span>
+</span></span><span class=line><span class=cl>make run-demo
+</span></span></code></pre></td></tr></table></div></div><p><strong>高级测试</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用AddressSanitizer检测内存错误</span>
+</span></span><span class=line><span class=cl>make run-asan-overwrite
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用Valgrind检测内存问题</span>
+</span></span><span class=line><span class=cl>make valgrind
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有可用命令</span>
+</span></span><span class=line><span class=cl>make <span class=nb>help</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 清理生成的文件</span>
+</span></span><span class=line><span class=cl>make clean
+</span></span></code></pre></td></tr></table></div></div><p><strong>代码结构说明</strong>：</p><ul><li>每个程序都包含段错误处理机制</li><li>使用<code>setjmp/longjmp</code>捕获可能的崩溃</li><li>详细的内存布局分析和结果输出</li><li>支持多种编译器选项和调试工具</li></ul><h3 id=b-编译和运行指令>B. 编译和运行指令</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 越界访问测试</span>
+</span></span><span class=line><span class=cl>make run
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 数组改写测试</span>
+</span></span><span class=line><span class=cl>make run-overwrite
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># AddressSanitizer测试</span>
+</span></span><span class=line><span class=cl>make run-asan
+</span></span><span class=line><span class=cl>make run-asan-overwrite
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Valgrind测试</span>
+</span></span><span class=line><span class=cl>make valgrind
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看符号表</span>
+</span></span><span class=line><span class=cl>objdump -t array_bounds_test <span class=p>|</span> grep -E <span class=s2>&#34;(A|B)</span>$<span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有可用命令</span>
+</span></span><span class=line><span class=cl>make <span class=nb>help</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=c-测试结果示例>C. 测试结果示例</h3><h4 id=基础越界访问测试输出示例>基础越界访问测试输出示例：</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>全局字符数组越界访问测试程序
+</span></span><span class=line><span class=cl>=====================================
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 数组信息 ===
+</span></span><span class=line><span class=cl>数组A地址: 0x564e0133f120
+</span></span><span class=line><span class=cl>数组B地址: 0x564e0133f110
+</span></span><span class=line><span class=cl>数组A大小: 10 字节
+</span></span><span class=line><span class=cl>数组B大小: 10 字节
+</span></span><span class=line><span class=cl>A和B之间的距离: -16 字节
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 数组初始化完成 ===
+</span></span><span class=line><span class=cl>数组A内容: A B C D E F G H I J 
+</span></span><span class=line><span class=cl>数组B内容: a b c d e f g h i j 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 测试数组访问 ===
+</span></span><span class=line><span class=cl>正常访问测试:
+</span></span><span class=line><span class=cl>A[0] = A
+</span></span><span class=line><span class=cl>A[9] = J
+</span></span><span class=line><span class=cl>B[0] = a
+</span></span><span class=line><span class=cl>B[9] = j
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>越界访问测试:
+</span></span><span class=line><span class=cl>A[10] = ? (ASCII: 0) - 成功读取
+</span></span><span class=line><span class=cl>A[11] = ? (ASCII: 0) - 成功读取
+</span></span><span class=line><span class=cl>A[12] = ? (ASCII: 0) - 成功读取  ← 关键结果：A[12]可以访问！
+</span></span><span class=line><span class=cl>A[13] = ? (ASCII: 0) - 成功读取
+</span></span><span class=line><span class=cl>A[14] = ? (ASCII: 0) - 成功读取
+</span></span><span class=line><span class=cl>A[15] = ? (ASCII: 0) - 成功读取
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>越界写入测试:
+</span></span><span class=line><span class=cl>A[10] = &#39;X&#39; - 成功写入
+</span></span><span class=line><span class=cl>A[11] = &#39;X&#39; - 成功写入
+</span></span><span class=line><span class=cl>A[12] = &#39;X&#39; - 成功写入  ← 关键结果：A[12]可以写入！
+</span></span></code></pre></td></tr></table></div></div><h4 id=数组改写测试输出示例>数组改写测试输出示例：</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>全局数组A改写数组B测试程序
+</span></span><span class=line><span class=cl>================================
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 内存布局信息 ===
+</span></span><span class=line><span class=cl>数组A地址: 0x564a46bc3120
+</span></span><span class=line><span class=cl>数组B地址: 0x564a46bc3110
+</span></span><span class=line><span class=cl>A和B之间的距离: -16 字节
+</span></span><span class=line><span class=cl>内存布局: B在前，A在后
+</span></span><span class=line><span class=cl>A的负索引可能影响B数组
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 测试通过负索引改写B数组 ===
+</span></span><span class=line><span class=cl>A在B后面，距离16字节，尝试通过A[-16]访问B[0]
+</span></span><span class=line><span class=cl>✅ 成功！A[-16] = &#39;Y&#39; 改变了B[0]: &#39;a&#39; -&gt; &#39;Y&#39;  ← 关键结果：A可以改写B！
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 系统性测试：寻找能影响B的A索引 ===
+</span></span><span class=line><span class=cl>测试范围：A[-20] 到 A[30]
+</span></span><span class=line><span class=cl>🎯 A[-16] = &#39;Z&#39; 影响了B[0]: &#39;a&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-15] = &#39;Z&#39; 影响了B[1]: &#39;b&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-14] = &#39;Z&#39; 影响了B[2]: &#39;c&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-13] = &#39;Z&#39; 影响了B[3]: &#39;d&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-12] = &#39;Z&#39; 影响了B[4]: &#39;e&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-11] = &#39;Z&#39; 影响了B[5]: &#39;f&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-10] = &#39;Z&#39; 影响了B[6]: &#39;g&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-9] = &#39;Z&#39; 影响了B[7]: &#39;h&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-8] = &#39;Z&#39; 影响了B[8]: &#39;i&#39; -&gt; &#39;Z&#39;
+</span></span><span class=line><span class=cl>🎯 A[-7] = &#39;Z&#39; 影响了B[9]: &#39;j&#39; -&gt; &#39;Z&#39;  ← A[-16]~A[-7]完全控制B数组！
+</span></span></code></pre></td></tr></table></div></div><h4 id=安全演示输出示例>安全演示输出示例：</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>危险的数组越界访问演示
+</span></span><span class=line><span class=cl>========================
+</span></span><span class=line><span class=cl>系统初始化完成
+</span></span><span class=line><span class=cl>管理员权限: NOADMIN
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>=== 内存布局信息 ===
+</span></span><span class=line><span class=cl>user_input地址: 0x5561d97b2018
+</span></span><span class=line><span class=cl>admin_flag地址: 0x5561d97b2028
+</span></span><span class=line><span class=cl>两者距离: 16 字节
+</span></span><span class=line><span class=cl>⚠️  admin_flag在user_input后16字节
+</span></span><span class=line><span class=cl>⚠️  user_input[16] 可以修改admin_flag[0]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- 测试1: 正常输入 ---
+</span></span><span class=line><span class=cl>处理用户输入: hello
+</span></span><span class=line><span class=cl>用户输入已保存
+</span></span><span class=line><span class=cl>检查管理员权限...
+</span></span><span class=line><span class=cl>当前管理员标志: NOADMIN
+</span></span><span class=line><span class=cl>🔒 普通用户权限，无法执行特权操作。
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- 测试2: 长输入（可能的攻击）---
+</span></span><span class=line><span class=cl>尝试通过长输入覆盖admin_flag...
+</span></span><span class=line><span class=cl>恶意输入长度: 21 字节
+</span></span><span class=line><span class=cl>处理用户输入: XXXXXXXXXXXXXXXXADMIN
+</span></span><span class=line><span class=cl>用户输入已保存
+</span></span><span class=line><span class=cl>检查管理员权限...
+</span></span><span class=line><span class=cl>当前管理员标志: ADMININ
+</span></span><span class=line><span class=cl>🔓 管理员权限已激活！可以执行特权操作。  ← 攻击成功！
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>💀 攻击成功！通过缓冲区溢出获得了管理员权限！
+</span></span></code></pre></td></tr></table></div></div><h3 id=d-相关资源>D. 相关资源</h3><ul><li><a class=link href=https://www.iso.org/standard/57853.html target=_blank rel=noopener>C11标准文档</a></li><li><a class=link href=https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html target=_blank rel=noopener>GCC文档 - AddressSanitizer</a></li><li><a class=link href=https://www.kernel.org/doc/html/latest/admin-guide/mm/index.html target=_blank rel=noopener>Linux内存管理</a></li></ul><hr><h2 id=-结论>📝 结论</h2><p>通过详细的实验验证，我们得出以下结论：</p><h3 id=-直接回答原问题>🎯 直接回答原问题：</h3><ol><li><strong>A[12]不会崩溃，可以正常访问</strong></li><li><strong>A数组可以直接改写B数组的内容</strong></li></ol><h3 id=-技术发现>🔬 技术发现：</h3><ol><li><strong>内存布局</strong>：B数组在A数组前16字节，编译器在它们之间留有6字节填充</li><li><strong>访问方式</strong>：通过A[-16] ~ A[-7]可以完全控制B[0] ~ B[9]</li><li><strong>检测工具</strong>：AddressSanitizer能检测到大范围越界，但对小范围越界不敏感</li></ol><h3 id=-安全警告>⚠️ 安全警告：</h3><ol><li><strong>未定义行为</strong>：这种访问方式是C标准未定义的行为</li><li><strong>极度危险</strong>：A数组能完全控制B数组，可能导致严重安全问题</li><li><strong>不可移植</strong>：不同编译器、平台可能有完全不同的行为</li></ol><h3 id=-最佳实践>💡 最佳实践：</h3><ol><li><strong>永远不要依赖这种行为</strong></li><li><strong>使用边界检查和安全的数据结构</strong></li><li><strong>启用所有编译器警告和静态分析工具</strong></li></ol><p><strong>最重要的提醒</strong>：虽然测试显示不会崩溃，但这种行为是不可预测和不可移植的。在任何生产环境中都应该避免数组越界访问。</p><hr><p><em>报告生成时间：2025年9月12日</em><br><em>测试环境：Linux x86_64, GCC编译器</em></p></section><footer class=article-footer><section class=article-tags><a href=/tags/%E5%86%85%E5%AD%98/>内存</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><footer class=site-footer><section class=copyright>&copy;
+2025 二进制</section><section class=powerby></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
