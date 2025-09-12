@@ -1825,7 +1825,7 @@
 &lt;p&gt;&lt;strong&gt;最重要的提醒&lt;/strong&gt;：虽然测试显示不会崩溃，但这种行为是不可预测和不可移植的。在任何生产环境中都应该避免数组越界访问。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;em&gt;报告生成时间：2025年9月12日&lt;/em&gt;&lt;br&gt;
-&lt;em&gt;测试环境：Linux x86_64, GCC编译器&lt;/em&gt;&lt;/p&gt;</description></item><item><title>函数访问到了流程中不存在的函数</title><link>https://zhangquanhua1.github.io/p/%E5%87%BD%E6%95%B0%E8%AE%BF%E9%97%AE%E5%88%B0%E4%BA%86%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%87%BD%E6%95%B0/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/%E5%87%BD%E6%95%B0%E8%AE%BF%E9%97%AE%E5%88%B0%E4%BA%86%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%87%BD%E6%95%B0/</guid><description>&lt;h1 id="内存踩踏现象分析报告---a操作b内存但a不崩溃b访问时崩溃"&gt;内存踩踏现象分析报告 - A操作B内存但A不崩溃，B访问时崩溃
+&lt;em&gt;测试环境：Linux x86_64, GCC编译器&lt;/em&gt;&lt;/p&gt;</description></item><item><title>内存踩踏现象</title><link>https://zhangquanhua1.github.io/p/%E5%86%85%E5%AD%98%E8%B8%A9%E8%B8%8F%E7%8E%B0%E8%B1%A1/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/%E5%86%85%E5%AD%98%E8%B8%A9%E8%B8%8F%E7%8E%B0%E8%B1%A1/</guid><description>&lt;h1 id="内存踩踏现象分析报告---a操作b内存但a不崩溃b访问时崩溃"&gt;内存踩踏现象分析报告 - A操作B内存但A不崩溃，B访问时崩溃
 &lt;/h1&gt;&lt;h2 id="-目录"&gt;📋 目录
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="#%e9%97%ae%e9%a2%98%e8%83%8c%e6%99%af" &gt;问题背景&lt;/a&gt;&lt;/li&gt;
@@ -2796,35 +2796,7 @@
 &lt;p&gt;这种内存踩踏现象是C/C++程序中最隐蔽和危险的bug类型之一，需要开发者保持高度警惕并采取多层防护措施。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;em&gt;报告生成时间：2025年9月12日&lt;/em&gt;&lt;br&gt;
-&lt;em&gt;测试环境：Linux x86_64, GCC编译器&lt;/em&gt;&lt;/p&gt;</description></item><item><title>函数访问到了流程中不存在的函数</title><link>https://zhangquanhua1.github.io/p/%E5%87%BD%E6%95%B0%E8%AE%BF%E9%97%AE%E5%88%B0%E4%BA%86%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%87%BD%E6%95%B0/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/%E5%87%BD%E6%95%B0%E8%AE%BF%E9%97%AE%E5%88%B0%E4%BA%86%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E5%87%BD%E6%95%B0/</guid><description>&lt;p&gt;C/C++编程中一个极其经典、常见且危险的问题的典型表现。它的名字是：&lt;/p&gt;
-&lt;p&gt;栈缓冲区溢出导致返回地址被覆盖，进而 hijack（劫持）程序执行流
-这是一个属于 “内存损坏” (Memory Corruption) 大类的经典问题，也是历史上绝大多数软件安全漏洞的根源。&lt;/p&gt;
-&lt;p&gt;为什么说它“经典”？
-历史悠久：自C语言诞生以来，这个问题就一直存在。1988年著名的 “莫里斯蠕虫” 就利用了fingerd程序的栈缓冲区溢出漏洞，成为了首个引起全球关注的网络攻击事件。&lt;/p&gt;
-&lt;p&gt;安全漏洞的常青树：尽管现代操作系统和编译器已经引入了许多缓解措施（如DEP/NX, ASLR, Stack Canaries），但由代码编写不当导致的栈溢出依然是常见的高危漏洞来源。&lt;/p&gt;
-&lt;p&gt;教科书式的案例：几乎所有讲解C/C++内存安全、软件漏洞和逆向工程的课程和书籍，都会以“栈缓冲区溢出”作为开篇的第一个经典案例。&lt;/p&gt;
-&lt;p&gt;这个经典问题的核心要素与您的日志完美匹配
-经典问题要素 在您的日志中的体现&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;根源：不安全的操作 您的代码中（很可能在libnstackx_ctrl.z.so）存在对固定大小的栈数组（如char buf[100]）进行写入操作，且未检查输入长度。&lt;/li&gt;
-&lt;li&gt;触发：越界写入 一个过长的输入（如网络数据包）被拷贝到该数组中，写入了超出其分配空间的数据。&lt;/li&gt;
-&lt;li&gt;破坏：覆盖关键数据 越界数据覆盖了栈上保存的函数返回地址。这是栈帧结构的一部分，位于局部变量之后。&lt;/li&gt;
-&lt;li&gt;表现：控制流劫持 当前函数执行完毕时，CPU从被覆盖的返回地址处读取下一个要执行的指令地址。这个地址被篡改成了一个无效值 (0x0000000000308720)。&lt;/li&gt;
-&lt;li&gt;结果：崩溃 CPU试图执行无效地址的指令，导致段错误 (SIGSEGV)。&lt;/li&gt;
-&lt;li&gt;附加特征：调用栈不可靠 由于栈本身已被破坏，任何试图回溯调用栈的工具都会得到不可靠甚至完全错误的结果。工具在垃圾数据中扫描，误将某些数据解释为指向PostAuthEvent的指针。这正是该经典问题的标志性特征。
-与之相关的其他经典概念
-Smashing The Stack：这是一篇发表于1996年的著名论文《Smashing The Stack for Fun and Profit》的标题。该论文详细讲解了如何利用栈缓冲区溢出来执行任意代码，使得这个问题在安全社区人尽皆知。您的案例就是“Stack Smashing”的一个典型后果。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Segmentation Fault (SIGSEGV)：这是此类问题最直接、最常见的结果。&lt;/p&gt;
-&lt;p&gt;未定义行为 (Undefined Behavior)：在C/C++标准中，数组越界访问就属于“未定义行为”，意味着任何事情都可能发生。程序崩溃反而是相对“好”的结果。&lt;/p&gt;
-&lt;p&gt;总结
-您遇到的不是什么稀奇古怪的新问题，而是一个教科书级别的、经典的栈缓冲区溢出导致程序控制流被劫持并最终崩溃的案例。&lt;/p&gt;
-&lt;p&gt;排查这类问题的经典方法是：&lt;/p&gt;
-&lt;p&gt;忽略不可靠的调用栈，认识到PostAuthEvent是受害者而非元凶。&lt;/p&gt;
-&lt;p&gt;将注意力集中在崩溃线程（nStackXDFinder）中所有对固定大小数组进行写入操作的代码上。&lt;/p&gt;
-&lt;p&gt;使用AddressSanitizer等工具，它们能像侦探一样精准地指出是哪一行代码发生了越界写入。&lt;/p&gt;
-&lt;p&gt;修复代码，用带长度检查的安全函数（如snprintf, strncpy）替换不安全的函数（如sprintf, strcpy），并在拷贝前始终进行长度校验。&lt;/p&gt;
-&lt;p&gt;这个问题之所以经典，是因为它完美地展示了C/C++在赋予程序员强大内存控制能力的同时，也要求程序员承担起全部的责任，细微的疏忽就会导致整个程序以最意想不到的方式崩溃。&lt;/p&gt;</description></item><item><title>Linux内核启动流程</title><link>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid><description>&lt;h1 id="加电复位cpu的本能"&gt;加电复位：CPU的&amp;quot;本能&amp;quot;
+&lt;em&gt;测试环境：Linux x86_64, GCC编译器&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Linux内核启动流程</title><link>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid><description>&lt;h1 id="加电复位cpu的本能"&gt;加电复位：CPU的&amp;quot;本能&amp;quot;
 &lt;/h1&gt;&lt;p&gt;当按下开机键，CPU获得电力后，其行为由硬件设计预先决定：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
