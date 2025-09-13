@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>进程 on 二进制</title><link>https://zhangquanhua1.github.io/categories/%E8%BF%9B%E7%A8%8B/</link><description>Recent content in 进程 on 二进制</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 06 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://zhangquanhua1.github.io/categories/%E8%BF%9B%E7%A8%8B/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux内核启动流程</title><link>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid><description>&lt;h1 id="加电复位cpu的本能"&gt;加电复位：CPU的&amp;quot;本能&amp;quot;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>进程 on 二进制</title><link>https://latteratter-coder.github.io/categories/%E8%BF%9B%E7%A8%8B/</link><description>Recent content in 进程 on 二进制</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 06 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://latteratter-coder.github.io/categories/%E8%BF%9B%E7%A8%8B/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux内核启动流程</title><link>https://latteratter-coder.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://latteratter-coder.github.io/p/linux%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid><description>&lt;h1 id="加电复位cpu的本能"&gt;加电复位：CPU的&amp;quot;本能&amp;quot;
 &lt;/h1&gt;&lt;p&gt;当按下开机键，CPU获得电力后，其行为由硬件设计预先决定：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -194,7 +194,7 @@
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;init&lt;/code&gt; / &lt;code&gt;systemd&lt;/code&gt;&lt;/strong&gt;：是赛后活动组织者，根据规则启动各种游戏和服务（用户进程）。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;内核并非后台守护进程，而是&lt;strong&gt;系统的基石&lt;/strong&gt;。它静默地存在于内存中，等待被应用程序和硬件事件调用，从而为所有程序提供安全、可靠、统一的硬件访问和管理服务。&lt;/p&gt;</description></item><item><title>内核是如何管理进程的</title><link>https://zhangquanhua1.github.io/p/%E5%86%85%E6%A0%B8%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/%E5%86%85%E6%A0%B8%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84/</guid><description>&lt;p&gt;内核管理进程的核心可以概括为：&lt;strong&gt;“一抽象，两分离，四管理”&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;内核并非后台守护进程，而是&lt;strong&gt;系统的基石&lt;/strong&gt;。它静默地存在于内存中，等待被应用程序和硬件事件调用，从而为所有程序提供安全、可靠、统一的硬件访问和管理服务。&lt;/p&gt;</description></item><item><title>内核是如何管理进程的</title><link>https://latteratter-coder.github.io/p/%E5%86%85%E6%A0%B8%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://latteratter-coder.github.io/p/%E5%86%85%E6%A0%B8%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84/</guid><description>&lt;p&gt;内核管理进程的核心可以概括为：&lt;strong&gt;“一抽象，两分离，四管理”&lt;/strong&gt;。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;一抽象&lt;/strong&gt;：将运行中的程序抽象为&lt;strong&gt;进程（Process）&lt;/strong&gt;。&lt;/p&gt;
@@ -385,7 +385,7 @@
 &lt;p&gt;&lt;strong&gt;用系统调用提供接口&lt;/strong&gt;：作为用户进程请求内核服务的唯一入口，保证安全和可控。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;最终，内核像一位交响乐指挥家，协调着各个进程（乐手），合理分配硬件资源（乐器），让整个系统（乐团）和谐、高效地运行。&lt;/p&gt;</description></item><item><title>加载一个新程序的过程</title><link>https://zhangquanhua1.github.io/p/%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA%E6%96%B0%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%87%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://zhangquanhua1.github.io/p/%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA%E6%96%B0%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%87%E7%A8%8B/</guid><description>&lt;h1 id="总体概览"&gt;总体概览
+&lt;p&gt;最终，内核像一位交响乐指挥家，协调着各个进程（乐手），合理分配硬件资源（乐器），让整个系统（乐团）和谐、高效地运行。&lt;/p&gt;</description></item><item><title>加载一个新程序的过程</title><link>https://latteratter-coder.github.io/p/%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA%E6%96%B0%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%87%E7%A8%8B/</link><pubDate>Sat, 06 Sep 2025 00:00:00 +0000</pubDate><guid>https://latteratter-coder.github.io/p/%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AA%E6%96%B0%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%87%E7%A8%8B/</guid><description>&lt;h1 id="总体概览"&gt;总体概览
 &lt;/h1&gt;&lt;p&gt;加载并执行一个新程序的过程可以概括为以下几步：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
